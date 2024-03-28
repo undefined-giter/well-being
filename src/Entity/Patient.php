@@ -11,11 +11,11 @@ use App\Repository\PatientRepository;
 #[ORM\DiscriminatorColumn(name:"user_type", type:"string")]
 #[ORM\DiscriminatorMap(["user" => User::class, "patient" => Patient::class])]
 class Patient extends User
-{
+{    
     #[ORM\Column]
     private ?bool $is_followed = null;
 
-    public function isIsFollowed(): ?bool
+    public function getIsFollowed(): ?bool
     {
         return $this->is_followed;
     }

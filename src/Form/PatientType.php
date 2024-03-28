@@ -2,31 +2,42 @@
 
 namespace App\Form;
 
-use App\Entity\User;
+use App\Entity\Patient;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
-class UserType extends AbstractType
+class PatientType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('first_name', ['label' => 'first name'])
-            ->add('last_name', ['label' => 'last name'])
-            ->add('email')
-            ->add('password')
+            ->add('first_name', null, ['label' => 'first name'])
+            ->add('last_name', null, ['label' => 'last name'])
+            ->add('email', null)
+            ->add('password', PasswordType::class, [
+                'label' => 'Password',
+                'attr' => [
+                    'class' => 'form-control mb-3',
+                    'placeholder' => 'Password'
+                ]
+            ])
             ->add('picture', FileType::class, [
                 'label' => 'Profile Picture',
                 'required' => false,
             ])
             ->add('description')
+            // ->add('slug')
+            // ->add('roles', null)
+            // ->add('registration_date', null, ['widget' => 'single_text'])
+            // ->add('is_followed')
         ;
 
         $builder->add('save', SubmitType::class, [
-            'label' => 'Save',
+            'label' => 'Register As Patient',
             'attr' => ['class' => 'btn btn-primary'],
         ]);
     }
@@ -34,7 +45,7 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => Patient::class,
         ]);
     }
 }

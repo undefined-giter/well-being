@@ -6,10 +6,12 @@ use DateTime;
 use DateTimeZone;
 use App\Entity\Patient;
 use App\Form\PatientType;
+use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -22,7 +24,7 @@ class PatientRegisterController extends AbstractController
         $this->passwordHasher = $passwordHasher;
     }
 
-    #[Route('/patient_register', name: 'patient_register')]
+    #[Route('/patient-register', name: 'patient_register')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(PatientType::class);
@@ -32,11 +34,22 @@ class PatientRegisterController extends AbstractController
 
             $patient = $form->getData();
 
+            $patient->setFirstName($this->capitalizeName($patient->getFirstName()));
+
+            $patient->setLastName($this->capitalizeName($patient->getLastName()));
+
             $patient->setSlug($this->generateSlug($patient->getFirstName(), $patient->getLastName()));
             
             $hashedPassword = $this->passwordHasher->hashPassword($patient, $patient->getPassword());
             $patient->setPassword($hashedPassword);
 
+            $pictureFile = $form->get('picture')->getData();
+        
+            $originalFileName = $pictureFile->getClientOriginalName();
+            $uuid = Uuid::v4()->__toString();
+            $extension = $pictureFile->getClientOriginalExtension();
+            $newFileName = pathinfo($originalFileName, PATHINFO_FILENAME) . '_' . $uuid . '.' . $extension;
+            
             $patient->setRoles(['patient']);
 
             $is_followed = $patient->getIsFollowed();
@@ -59,6 +72,16 @@ class PatientRegisterController extends AbstractController
         return $this->render('patient_register/index.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+
+    private function capitalizeName($name) {
+        $name = ucwords($name);
+        $name = preg_replace_callback('/(?:\s|-|^)([a-z])/', function($matches) {
+            return strtoupper($matches[0]);
+        }, $name);
+    
+        return $name;
     }
 
     private function generateSlug(string $firstName, string $lastName): string

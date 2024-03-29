@@ -9,7 +9,6 @@ use App\Repository\ProfessionalRepository;
 
 #[ORM\Entity(repositoryClass: ProfessionalRepository::class)]
 #[ORM\InheritanceType("JOINED")]
-#[ORM\DiscriminatorColumn(name:"user_type", type:"string")]
 #[ORM\DiscriminatorMap(["user" => User::class, "professional" => Professional::class])]
 class Professional extends User
 {

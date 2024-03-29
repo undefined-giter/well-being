@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ProfessionalRegisterController extends AbstractController
 {
-    #[Route('/professional_register', name: 'professional_register')]
+    #[Route('/professional-register', name: 'professional_register')]
     public function index(): Response
     {
         $form = $this->createForm(ProfessionalType::class);

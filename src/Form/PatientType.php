@@ -28,6 +28,7 @@ class PatientType extends AbstractType
             ->add('picture', FileType::class, [
                 'label' => 'Profile Picture',
                 'required' => false,
+                'mapped' => false,
             ])
             ->add('description')
             // ->add('slug')

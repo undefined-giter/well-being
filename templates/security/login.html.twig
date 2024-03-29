@@ -3,6 +3,13 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
+
+{% for flashMessage in app.flashes('success') %}
+    <div class="alert alert-success mt-2" data-duration="{{ flashMessage.duration }}">
+        {{ flashMessage.message }}
+    </div>
+{% endfor %}
+
 <form method="post" class="mx-3">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -34,4 +41,18 @@
         Sign in
     </button>
 </form>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let flashMessages = document.querySelectorAll('.alert');
+            flashMessages.forEach(function(message) {
+                let duration = message.dataset.duration || 5000; // Durée par défaut de 5 secondes
+                setTimeout(function() {
+                    message.style.display = 'none';
+                }, duration);
+            });
+        });
+    </script>
 {% endblock %}

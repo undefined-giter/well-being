@@ -20,14 +20,13 @@ security:
             entry_point: App\Security\UserAuthenticator
 
             form_login:
-                login_path: login
-                check_path: login
-                default_target_path: /
+                login_path: /login
+                check_path: /login
+                #default_target_path: /personnal-page/{slug}
 
             logout:
-                path: logout
-                # where to redirect after logout
-                # target: app_any_route
+                path: /logout
+                target: /login
 
             remember_me:
                 secret: '%kernel.secret%'

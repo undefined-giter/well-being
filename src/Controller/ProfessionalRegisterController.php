@@ -20,7 +20,9 @@ class ProfessionalRegisterController extends AbstractController
             $entityManager->persist($form->getData());
             $entityManager->flush();
 
-            return $this->redirectToRoute('login');
+            $session->set('just_registered', true);
+
+            return $this->redirectToRoute('login', ['latest_email_registered' => $patient->getEmail()]);
         }
 
         return $this->render('professional_register/index.html.twig', [

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -25,7 +26,7 @@ class PatientRegisterController extends AbstractController
     }
 
     #[Route('/patient-register', name: 'patient_register')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $form = $this->createForm(PatientType::class);
 
@@ -44,12 +45,13 @@ class PatientRegisterController extends AbstractController
             $patient->setPassword($hashedPassword);
 
             $pictureFile = $form->get('picture')->getData();
-        
-            $originalFileName = $pictureFile->getClientOriginalName();
-            $uuid = Uuid::v4()->__toString();
-            $extension = $pictureFile->getClientOriginalExtension();
-            $newFileName = pathinfo($originalFileName, PATHINFO_FILENAME) . '_' . $uuid . '.' . $extension;
-            
+            if ($pictureFile instanceof UploadedFile) {
+                $originalFileName = $pictureFile->getClientOriginalName();
+                $uuid = Uuid::v4()->__toString();
+                $extension = $pictureFile->getClientOriginalExtension();
+                $newFileName = pathinfo($originalFileName, PATHINFO_FILENAME) . '_' . $uuid . '.' . $extension;
+            }
+
             $patient->setRoles(['patient']);
 
             $is_followed = $patient->getIsFollowed();
@@ -59,14 +61,19 @@ class PatientRegisterController extends AbstractController
             $registrationDate = new DateTime('now', new DateTimeZone('Europe/Paris'));
             $patient->setRegistrationDate($registrationDate);
 
-            echo '<pre>';
-            var_dump($patient);
-            echo '</pre>';
+            // echo '<pre>'; var_dump($patient); echo '</pre>';
+            
+            $session->getFlashBag()->add('success', [
+                'message' => 'You have been recorded, please login🌳',
+                'duration' => 5000
+            ]);
             
             $entityManager->persist($patient);
             $entityManager->flush();
 
-            return $this->redirectToRoute('login');
+            $session->set('just_registered', true);
+            
+            return $this->redirectToRoute('login', ['latest_email_registered' => $patient->getEmail()]);
         }
 
         return $this->render('patient_register/index.html.twig', [
@@ -88,7 +95,6 @@ class PatientRegisterController extends AbstractController
     {
         $fullName = $firstName . ' ' . $lastName;
 
-        //replace accents letters
         $slug = str_replace(
             ['à', 'â', 'ä', 'á', 'ã', 'å', 'î', 'ï', 'ì', 'í', 
             'ô', 'ö', 'ò', 'ó', 'õ', 'ø', 'ù', 'û', 'ü', 'ú', 

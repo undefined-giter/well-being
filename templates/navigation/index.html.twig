@@ -1,0 +1,39 @@
+<style>
+.register-dropdown {display: none;}
+
+.register-link:hover .register-dropdown {display: block;}
+</style>
+
+<nav class="flex flex-wrap items-center justify-between">
+    <ul class="flex">
+        <li class="mr-6">
+            <a href="{{ path('homepage') }}">
+                <img src='{{ asset('wellBeing.png') }}' width='22px' alt='Well-Being icon'>
+            </a>
+        </li>
+        <li class="register-link mr-6">
+            Register
+            <ul class="register-dropdown">
+                <li><a href="{{ path('patient_register') }}" class='text-green-500'>As Patient</a></li>
+                <li><a href="{{ path('professional_register') }}" class='text-amber-400'>As Professional</a></li>
+            </ul>
+        </li>
+    </ul>
+    <ul class="flex">
+        <li>
+            <a href="{{ path('logout') }}">
+                <img src='{{ asset('logout.png') }}' width='22px' alt='Logout icon' title='Logout'>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<script>
+document.addEventListener("hover", function(event) {
+    const dropdown = document.querySelector(".register-dropdown");
+    const registerLink = document.querySelector(".register-link");
+    if (event.target !== registerLink && !registerLink.contains(event.target)) {
+        dropdown.style.display = "none";
+    }
+});
+</script>

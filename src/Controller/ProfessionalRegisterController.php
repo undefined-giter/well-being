@@ -2,16 +2,39 @@
 
 namespace App\Controller;
 
-use App\Form\ProfessionalType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use DateTime;
+use DateTimeZone;
+use App\Entity\Patient;
+use App\Form\PatientType;
+use Symfony\Component\Uid\Uuid;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ProfessionalRegisterController extends AbstractController
 {
-    #[Route('/professional-register', name: 'professional_register')]
-    public function index(): Response
+    private $passwordHasher;
+    private $session;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
+        $this->passwordHasher = $passwordHasher;
+    }
+
+    #[Route('/professional-register', name: 'professional_register')]
+    public function index(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
+    {
+        if ($this->getUser() && in_array('professional', $this->getUser()->getRoles())) {
+            $session->getFlashBag()->add('info', 'You are already registered as a professional.');
+            return $this->redirectToRoute('login');
+        }
+
         $form = $this->createForm(ProfessionalType::class);
 
         $form->handleRequest($request);

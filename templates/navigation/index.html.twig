@@ -1,39 +1,41 @@
 <style>
-.register-dropdown {display: none;}
+.register-dropdown {
+    display: none;
+    position: absolute;
+    z-index: 10;
+    background-color: #2c5282;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+}
 
-.register-link:hover .register-dropdown {display: block;}
+.register-link:hover .register-dropdown {
+    display: block;
+}
 </style>
 
-<nav class="flex flex-wrap items-center justify-between">
-    <ul class="flex">
-        <li class="mr-6">
+<nav class="flex flex-wrap items-center justify-between w-full mt-2">
+    <ul class="flex justify-between w-full">
+        <li class="mx-6">
             <a href="{{ path('homepage') }}">
-                <img src='{{ asset('wellBeing.png') }}' width='22px' alt='Well-Being icon'>
+                <img src='{{ asset('img/wellBeing.png') }}' width='22px' alt='Well-Being icon'>
             </a>
         </li>
-        <li class="register-link mr-6">
-            Register
-            <ul class="register-dropdown">
-                <li><a href="{{ path('patient_register') }}" class='text-green-500'>As Patient</a></li>
-                <li><a href="{{ path('professional_register') }}" class='text-amber-400'>As Professional</a></li>
-            </ul>
-        </li>
-    </ul>
-    <ul class="flex">
-        <li>
-            <a href="{{ path('logout') }}">
-                <img src='{{ asset('logout.png') }}' width='22px' alt='Logout icon' title='Logout'>
-            </a>
+        <li class="mr-6 relative flex justify-end">
+            {% if not app.user %}
+                <div class='register-link'>
+                    <i class="fas fa-user cursor-pointer"></i>
+                    <ul class="register-dropdown absolute -right-5 top-full rounded">
+                        <li><a href="{{ path('patient_register') }}" class='block p-2 text-green-500 hover:bg-green-100 rounded'>Patient</a></li>
+                        <li><a href="{{ path('professional_register') }}" class='block p-2 text-amber-400 hover:bg-amber-100 rounded'>Professional</a></li>
+                    </ul>
+                </div>
+                {% if loginPage is not defined %}
+                    <a href="{{ path('login') }}"><i class="fas fa-sign-in-alt ml-4 cursor-pointer"></i></a>
+                {% endif %}
+            {% else %}
+                <a href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i></a>
+            {% endif %}
         </li>
     </ul>
 </nav>
-
-<script>
-document.addEventListener("hover", function(event) {
-    const dropdown = document.querySelector(".register-dropdown");
-    const registerLink = document.querySelector(".register-link");
-    if (event.target !== registerLink && !registerLink.contains(event.target)) {
-        dropdown.style.display = "none";
-    }
-});
-</script>

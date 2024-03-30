@@ -14,11 +14,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 
 class PatientRegisterController extends AbstractController
 {
     private $passwordHasher;
+    private $session;
 
     public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
@@ -28,6 +31,11 @@ class PatientRegisterController extends AbstractController
     #[Route('/patient-register', name: 'patient_register')]
     public function index(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
+        if ($this->getUser() && in_array('patient', $this->getUser()->getRoles())) {
+            $session->getFlashBag()->add('info', 'You are already registered as a patient.');
+            return $this->redirectToRoute('login');
+        }
+        
         $form = $this->createForm(PatientType::class);
 
         $form->handleRequest($request);
@@ -60,8 +68,6 @@ class PatientRegisterController extends AbstractController
 
             $registrationDate = new DateTime('now', new DateTimeZone('Europe/Paris'));
             $patient->setRegistrationDate($registrationDate);
-
-            // echo '<pre>'; var_dump($patient); echo '</pre>';
             
             $session->getFlashBag()->add('success', [
                 'message' => 'You have been recorded, please login🌳',

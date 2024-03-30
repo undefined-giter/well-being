@@ -4,6 +4,12 @@
 
 {% block body %}
 
+{% for flash_message in app.session.flashbag.get('info') %}
+    <div class="alert alert-info mx-6">
+        {{ flash_message }}
+    </div>
+{% endfor %}
+
 {% for flashMessage in app.flashes('success') %}
     <div class="alert alert-success mt-2" data-duration="{{ flashMessage.duration }}">
         {{ flashMessage.message }}
@@ -16,8 +22,8 @@
     {% endif %}
 
     {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('logout') }}">Logout</a>
+        <p class="my-2">
+            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('logout') }}" class='text-orange-900'>Logout</a>
         </div>
     {% endif %}
 
@@ -48,7 +54,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             let flashMessages = document.querySelectorAll('.alert');
             flashMessages.forEach(function(message) {
-                let duration = message.dataset.duration || 5000; // Durée par défaut de 5 secondes
+                let duration = message.dataset.duration || 5000;
                 setTimeout(function() {
                     message.style.display = 'none';
                 }, duration);

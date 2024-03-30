@@ -27,7 +27,11 @@ class SecurityController extends AbstractController
             $latestEmailRegistered = null;
         }
 
-        return $this->render('security/login.html.twig', ['latestEmailRegistered' => $latestEmailRegistered, 'error' => $error]);
+        return $this->render('security/login.html.twig', [
+            'latestEmailRegistered' => $latestEmailRegistered,
+            'error' => $error,
+            'loginPage' => true
+        ]);
     }
 
     #[Route(path: '/logout', name: 'logout')]

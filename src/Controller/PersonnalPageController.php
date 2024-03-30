@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PersonnalPageController extends AbstractController
 {
-    #[Route('/personnal-page/{slug}', name: 'personnal_page')]
+    #[Route('/page-of-{slug}', name: 'personnal_page')]
     public function index(): Response
     {
         return $this->render('personnal_page/index.html.twig', []);

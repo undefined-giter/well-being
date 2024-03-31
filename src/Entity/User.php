@@ -95,7 +95,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @param list<string> $roles
      */
-    public function setRoles(array $roles): static
+    public function addRoles(array $roles): static
     {
         if ($this->roles) {
             foreach ($roles as $role) {

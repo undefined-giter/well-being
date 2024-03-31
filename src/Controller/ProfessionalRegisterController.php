@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use DateTime;
 use DateTimeZone;
-use App\Entity\Patient;
-use App\Form\PatientType;
+use App\Entity\Professional;
+use App\Form\ProfessionalType;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,13 +39,46 @@ class ProfessionalRegisterController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($form->getData());
+
+            $professional = $form->getData();
+
+            $professional->setFirstName($this->capitalizeName($professional->getFirstName()));
+
+            $professional->setLastName($this->capitalizeName($professional->getLastName()));
+
+            $professional->setSlug($this->generateSlug($professional->getFirstName(), $professional->getLastName()));
+            
+            $hashedPassword = $this->passwordHasher->hashPassword($professional, $professional->getPassword());
+            $professional->setPassword($hashedPassword);
+
+            $pictureFile = $form->get('picture')->getData();
+            if ($pictureFile instanceof UploadedFile) {
+                $originalFileName = $pictureFile->getClientOriginalName();
+                $uuid = Uuid::v4()->__toString();
+                $extension = $pictureFile->getClientOriginalExtension();
+                $newFileName = pathinfo($originalFileName, PATHINFO_FILENAME) . '_' . $uuid . '.' . $extension;
+            }
+
+            $professional->addRoles(['professional']);
+
+            $is_followed = $professional->getIsFollowed();
+            if ($is_followed === null || $is_followed === ''){$is_followed = false;}
+            $professional->setIsFollowed($is_followed);
+
+            $registrationDate = new DateTime('now', new DateTimeZone('Europe/Paris'));
+            $professional->setRegistrationDate($registrationDate);
+            
+            $session->getFlashBag()->add('success', [
+                'message' => 'You have been recorded, please login🌳',
+                'duration' => 5000
+            ]);
+            
+            $entityManager->persist($professional);
             $entityManager->flush();
 
             $session->set('just_registered', true);
-
-            return $this->redirectToRoute('login', ['latest_email_registered' => $patient->getEmail()]);
+            
+            return $this->redirectToRoute('login', ['latest_email_registered' => $professional->getEmail()]);
         }
 
         return $this->render('professional_register/index.html.twig', [

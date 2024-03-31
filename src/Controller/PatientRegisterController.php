@@ -60,7 +60,7 @@ class PatientRegisterController extends AbstractController
                 $newFileName = pathinfo($originalFileName, PATHINFO_FILENAME) . '_' . $uuid . '.' . $extension;
             }
 
-            $patient->setRoles(['patient']);
+            $patient->addRoles(['patient']);
 
             $is_followed = $patient->getIsFollowed();
             if ($is_followed === null || $is_followed === ''){$is_followed = false;}

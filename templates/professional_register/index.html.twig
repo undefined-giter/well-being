@@ -3,13 +3,9 @@
 {% block title %}Professional Registration{% endblock %}
 
 {% block map_head %}
+{# block map #}
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 <script>
-/**
-* @license
-* Copyright 2019 Google LLC. All Rights Reserved.
-* SPDX-License-Identifier: Apache-2.0
-*/
 let map;
 let marker;
 let geocoder;
@@ -32,14 +28,9 @@ function initMap() {
     const submitButton = document.createElement("input");
 
     submitButton.type = "button";
-    submitButton.value = "Geocode";
+    submitButton.value = "Find your place";
     submitButton.classList.add("button", "button-primary");
 
-    const clearButton = document.createElement("input");
-
-    clearButton.type = "button";
-    clearButton.value = "Clear";
-    clearButton.classList.add("button", "button-secondary");
     response = document.createElement("pre");
     response.id = "response";
     response.innerText = "";
@@ -47,17 +38,8 @@ function initMap() {
     responseDiv.id = "response-container";
     responseDiv.appendChild(response);
 
-    const instructionsElement = document.createElement("p");
-
-    instructionsElement.id = "instructions";
-    instructionsElement.innerHTML =
-    "<strong>Instructions</strong>: Enter an address in the textbox to geocode or click on the map to reverse geocode.";
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(inputText);
     map.controls[google.maps.ControlPosition.TOP_LEFT].push(submitButton);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(clearButton);
-    map.controls[google.maps.ControlPosition.LEFT_TOP].push(
-    instructionsElement
-    );
     map.controls[google.maps.ControlPosition.LEFT_TOP].push(responseDiv);
     marker = new google.maps.Marker({
     map,
@@ -68,9 +50,6 @@ function initMap() {
     submitButton.addEventListener("click", () =>
     geocode({ address: inputText.value })
     );
-    clearButton.addEventListener("click", () => {
-    clear();
-    });
     clear();
 }
 
@@ -91,25 +70,13 @@ function geocode(request) {
         response.innerText = JSON.stringify(result, null, 2);
         return results;
     })
-    .catch((e) => {
-        alert("Geocode was not successful for the following reason: " + e);
-    });
+    .catch((e) => {alert("No address found");});
 }
 
 window.initMap = initMap;
 </script>
 <style>
-    #map {
-    height: 100%;
-    }
-
-    html,
-    body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    }
-
+    #map {height: 100%;}
     input[type="text"] {
     background-color: #fff;
     border: 0;
@@ -123,7 +90,6 @@ window.initMap = initMap;
     margin-right: 0;
     min-width: 25%;
     }
-
     input[type="button"] {
     background-color: #fff;
     border: 0;
@@ -137,53 +103,19 @@ window.initMap = initMap;
     cursor: pointer;
     margin-left: 5px;
     }
-    input[type="button"]:hover {
-    background: rgb(235, 235, 235);
-    }
+    input[type="button"]:hover {background: rgb(235, 235, 235);}
     input[type="button"].button-primary {
     background-color: #1a73e8;
     color: white;
     }
-    input[type="button"].button-primary:hover {
-    background-color: #1765cc;
-    }
+    input[type="button"].button-primary:hover {background-color: #1765cc;}
     input[type="button"].button-secondary {
     background-color: white;
     color: #1a73e8;
     }
-    input[type="button"].button-secondary:hover {
-    background-color: #d2e3fc;
-    }
-
-    #response-container {
-    background-color: #fff;
-    border: 0;
-    border-radius: 2px;
-    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
-    margin: 10px;
-    padding: 0 0.5em;
-    font: 400 18px Roboto, Arial, sans-serif;
-    overflow: hidden;
-    overflow: auto;
-    max-height: 50%;
-    max-width: 90%;
-    background-color: rgba(255, 255, 255, 0.95);
-    font-size: small;
-    }
-
-    #instructions {
-    background-color: #fff;
-    border: 0;
-    border-radius: 2px;
-    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
-    margin: 10px;
-    padding: 0 0.5em;
-    font: 400 18px Roboto, Arial, sans-serif;
-    overflow: hidden;
-    padding: 1rem;
-    font-size: medium;
-    }
+    input[type="button"].button-secondary:hover {background-color: #d2e3fc;}
 </style>
+{# endblock map #}
 {% endblock %}
 
 {% block body %}
@@ -192,7 +124,7 @@ window.initMap = initMap;
     <h1 class='text-center'>Professional Registration</h1>
 
     <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-md-6 offset-md-3 relative">
             {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
             {{ form_row(form.first_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'First Name'}}) }}
             {{ form_row(form.last_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Last Name'}}) }}
@@ -201,13 +133,22 @@ window.initMap = initMap;
             {{ form_row(form.picture, {'attr': {'class': 'form-control mb-3'}}) }}
             {{ form_row(form.description, {'attr': {'class': 'form-control mb-3', 'rows': '4', 'placeholder': 'Description'}}) }}
             {{ form_row(form.specialization, {'label_attr': {'class': 'd-block'}, 'attr': {'class': 'form-control mb-3', 'style': 'height: 200px; display: inline-block; vertical-align: top;'}}) }}
+            {{ form_row(form.other_specialization_checkbox) }}
+            {{ form_row(form.other_specialization) }}
+            {{ form_row(form.online_availability) }}
+            {{ form_row(form.location, {'attr': {'class': 'hidden location_selector_class'}}) }}
+            <p id='address'>Enter or pick your location</p>
+            <div id="map" style='height:350px; border-radius:0.5em'></div>
+            <div class='absolute right-[10px]'>
+                {{ form_row(form.irl_availability) }}
+            </div>
+            <div class='mb-6'></div>
+            {{ form_row(form.video, {'attr': {'class': 'w-full'}})  }}
             {{ form_row(form._token) }}
-            <div style="text-align: right; margin-right: 20px">
-                {{ form_row(form.save) }}
+            <div class='text-right mr-4'>
+                {{ form_row(form.save, {'attr': {'class': 'btn bg-indigo-600 hover:bg-indigo-700 text-slate-200 hover:text-slate-200'}}) }}
             </div>
             {{ form_end(form) }}
-
-            <div id="map" style='height:350px'></div>
         </div>
     </div>
 </div>
@@ -217,18 +158,81 @@ window.initMap = initMap;
 
 {% block js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var otherSpecializationCheckbox = document.querySelector('.other-specialization-checkbox');
-        var otherSpecializationField = document.querySelector('.other-specialization-field');
+//Add a specialisation only for current registering Professional
+document.addEventListener('DOMContentLoaded', function () {
+    var otherSpecializationCheckbox = document.querySelector('.other-specialization-checkbox');
+    var otherSpecializationField = document.querySelector('.other-specialization-field');
 
-        otherSpecializationCheckbox.addEventListener('change', function () {
-            if (otherSpecializationCheckbox.checked) {
-                otherSpecializationField.style.display = 'inline';
-            } else {
-                otherSpecializationField.style.display = 'none';
-            }
-        });
+    otherSpecializationCheckbox.addEventListener('change', function () {
+        if (otherSpecializationCheckbox.checked) {
+            otherSpecializationField.style.display = 'inline';
+        } else {
+            otherSpecializationField.style.display = 'none';
+        }
     });
+});
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYE8CgVnJNKc95YAKb0abmU0eeaoT9MnE&callback=initMap&v=weekly&solution_channel=GMP_CCS_geocodingservice_v1" defer></script>
+
+{# Gives the array (latitude, longitude,address) of the location #}
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYE8CgVnJNKc95YAKb0abmU0eeaoT9MnE&callback=initMap&v=weekly&solution_channel=GMP_CCS_geocodingservice_v1" async defer></script>
+<script>
+window.addEventListener("load", function() {
+
+    let irl_availability = document.querySelector('.irl_availability-checkbox')
+    let irl_availability_label = document.querySelector('#irl_availability_label')
+    let map = document.querySelector('#map')
+    const addressParagraphe = document.querySelector('#address')
+    const locationInput = document.querySelector('.location_selector_class'); 
+
+    irl_availability.addEventListener('change', () =>{
+        if(!irl_availability.checked){
+            map.style.display= 'none'
+            addressParagraphe.style.display = 'none'
+            irl_availability_label.textContent = 'Check to share your professional place'
+        }
+        else{
+            irl_availability_label.textContent = 'Uncheck if no place'
+            map.style.display= 'block'
+            addressParagraphe.textContent = 'Enter or pick your location'
+            addressParagraphe.classList.remove('text-green-600')
+            addressParagraphe.style.display = 'block'
+            locationInput.value = []
+        }
+    })
+
+    const checkForResponseElement = setInterval(function() {
+        const responseElement = document.querySelector("#response");
+        if (responseElement) {
+            document.querySelector("#response-container").style.display = 'none'
+            clearInterval(checkForResponseElement);
+
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === "childList") {
+                        const responseString = responseElement.textContent;
+                        const response = JSON.parse(responseString);
+
+                        const latitude = response.results[0].geometry.location.lat;
+                        const longitude = response.results[0].geometry.location.lng;
+                        const address = response.results[0].formatted_address;
+
+                        addressParagraphe.classList.add('text-green-600')
+                        addressParagraphe.textContent = 'Address: ' + address
+
+                        locationInput.value = [
+                            { name: 'Latitude', value: latitude },
+                            { name: 'Longitude', value: longitude },
+                            { name: 'Address', value: address }
+                        ];
+                    }
+                });
+            });
+
+            const observerConfig = { childList: true };
+
+            observer.observe(responseElement, observerConfig);
+        }
+    }, 1000);
+});
+</script>
 {% endblock %}

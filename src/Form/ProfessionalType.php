@@ -3,6 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Professional;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -12,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class ProfessionalType extends AbstractType
 {
@@ -95,9 +99,27 @@ class ProfessionalType extends AbstractType
                     'placeholder' => 'Enter your specialization',
                 ],
             ])
-            ->add('online_availability')
+            ->add('location', CollectionType::class, [
+                'label' => false,
+                'entry_type' => TextType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'required' => false,
+            ])
+            ->add('online_availability', CheckboxType::class, [
+                'data' => true,
+            ])
+            ->add('irl_availability', CheckboxType::class, [
+                'label' => '<p id="irl_availability_label" style="color:orange; text-align:right">Uncheck if no place</p>',
+                'required' => false,
+                'mapped' => false,
+                'label_html' => true,
+                'data' => true,
+                'attr' => [
+                    'class' => 'irl_availability-checkbox',
+                ],
+            ])
             ->add('video')
-            ->add('location')
             // ->add('roles', null)
             // ->add('slug')
             // ->add('registration_date', null, ['widget' => 'single_text'])
@@ -105,8 +127,17 @@ class ProfessionalType extends AbstractType
 
         $builder->add('save', SubmitType::class, [
             'label' => 'Register as Professional',
-            'attr' => ['class' => 'btn btn-primary'],
         ]);
+
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
+            $irlAvailability = $form->get('irl_availability')->getData();
+            $onlineAvailability = $form->get('online_availability')->getData();
+
+            if (!$irlAvailability && !$onlineAvailability) {
+                $form->addError(new FormError('Select at least one availability option, your patients needs you.'));
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void

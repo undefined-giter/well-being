@@ -41,7 +41,7 @@ class ProfessionalRegisterController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $professional = $form->getData();
-
+            // var_dump($professional);die;
             $professional->setFirstName($this->capitalizeName($professional->getFirstName()));
 
             $professional->setLastName($this->capitalizeName($professional->getLastName()));

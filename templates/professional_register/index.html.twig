@@ -189,6 +189,7 @@ window.addEventListener("load", function() {
             map.style.display= 'none'
             addressParagraphe.style.display = 'none'
             irl_availability_label.textContent = 'Check to share your professional place'
+            irl_availability_label.style.color = 'green'
         }
         else{
             irl_availability_label.textContent = 'Uncheck if no place'
@@ -197,6 +198,7 @@ window.addEventListener("load", function() {
             addressParagraphe.classList.remove('text-green-600')
             addressParagraphe.style.display = 'block'
             locationInput.value = []
+            irl_availability_label.style.color = 'orange'
         }
     })
 

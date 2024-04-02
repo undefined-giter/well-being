@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 {# Gives the array (latitude, longitude,address) of the location #}
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYE8CgVnJNKc95YAKb0abmU0eeaoT9MnE&callback=initMap&v=weekly&solution_channel=GMP_CCS_geocodingservice_v1" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ googleMapsApiKey }}&callback=initMap&v=weekly&solution_channel=GMP_CCS_geocodingservice_v1" async defer></script>
 <script>
 window.addEventListener("load", function() {
 

@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ProfessionalRegisterController extends AbstractController
 {
@@ -28,7 +29,7 @@ class ProfessionalRegisterController extends AbstractController
     }
 
     #[Route('/professional-register', name: 'professional_register')]
-    public function index(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, SessionInterface $session, ParameterBagInterface $params): Response
     {
         if ($this->getUser() && in_array('professional', $this->getUser()->getRoles())) {
             $session->getFlashBag()->add('info', 'You are already registered as a professional.');
@@ -80,9 +81,12 @@ class ProfessionalRegisterController extends AbstractController
             
             return $this->redirectToRoute('login', ['latest_email_registered' => $professional->getEmail()]);
         }
+        
+        $googleMapsApiKey = $params->get('GOOGLE_MAPS_API_KEY');
 
         return $this->render('professional_register/index.html.twig', [
             'form' => $form->createView(),
+            'googleMapsApiKey' => $googleMapsApiKey,
         ]);
     }
 }

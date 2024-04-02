@@ -1,16 +1,11 @@
-# see https://symfony.com/doc/current/reference/configuration/framework.html
+parameters:
+    GOOGLE_MAPS_API_KEY: '%env(GOOGLE_MAPS_API_KEY)%'
+
 framework:
-    secret: '%env(APP_SECRET)%'
+    secret: '%kernel.charset%'
     #csrf_protection: true
-
-    # Note that the session will be started ONLY if you read or write from it.
-    session: true
-
     #esi: true
     #fragments: true
-
-when@test:
-    framework:
-        test: true
-        session:
-            storage_factory_id: session.storage.factory.mock_file
+    test: true
+    session:
+        storage_factory_id: session.storage.factory.mock_file

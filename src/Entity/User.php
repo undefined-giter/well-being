@@ -141,7 +141,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setFirstName(string $first_name): static
     {
-        $this->first_name = $first_name;
+        $this->first_name = $this->capitalizeName($first_name);
 
         return $this;
     }
@@ -153,9 +153,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setLastName(string $last_name): static
     {
-        $this->last_name = $last_name;
+        $this->last_name = $this->capitalizeName($last_name);
 
         return $this;
+    }
+
+    private function capitalizeName($name) {
+        $name = ucwords($name);
+        $name = preg_replace_callback('/(?:\s|-|^)([a-z])/', function($matches) {
+            return strtoupper($matches[0]);
+        }, $name);
+
+        return $name;
     }
 
     public function getSlug(): ?string
@@ -165,9 +174,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setSlug(string $slug): static
     {
-        $this->slug = $slug;
+        $this->slug = $this->generateSlug();
 
         return $this;
+    }
+
+    public function generateSlug(): string
+    {
+        //TODO: do not use capitalizeName function, may be needed
+        $fullName = $this->getFirstName() . ' ' . $this->getLastName();
+
+        $slug = str_replace(
+            ['à', 'â', 'ä', 'á', 'ã', 'å', 'î', 'ï', 'ì', 'í', 
+            'ô', 'ö', 'ò', 'ó', 'õ', 'ø', 'ù', 'û', 'ü', 'ú', 
+            'é', 'è', 'ê', 'ë', 'ç', 'ÿ', 'ñ', ],
+            ['a', 'a', 'a', 'a', 'a', 'a', 'i', 'i', 'i', 'i', 
+            'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 
+            'e', 'e', 'e', 'e', 'c', 'y', 'n', ],
+            $fullName);
+        
+        $slug = str_replace(' ', '-', $slug);
+        $slug = strtolower($slug);
+        $slug = substr($slug, 0, 255);
+        
+        return $slug;
     }
 
     public function getPicture(): ?string

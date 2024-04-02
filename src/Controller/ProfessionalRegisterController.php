@@ -43,11 +43,11 @@ class ProfessionalRegisterController extends AbstractController
 
             $professional = $form->getData();
             // var_dump($professional);die;
-            $professional->setFirstName($this->capitalizeName($professional->getFirstName()));
+            $professional->setFirstName($professional->getFirstName());
 
-            $professional->setLastName($this->capitalizeName($professional->getLastName()));
+            $professional->setLastName($professional->getLastName());
 
-            $professional->setSlug($this->generateSlug($professional->getFirstName(), $professional->getLastName()));
+            $professional->setSlug($professional->generateSlug());
             
             $hashedPassword = $this->passwordHasher->hashPassword($professional, $professional->getPassword());
             $professional->setPassword($hashedPassword);
@@ -61,10 +61,6 @@ class ProfessionalRegisterController extends AbstractController
             }
 
             $professional->addRoles(['professional']);
-
-            $is_followed = $professional->getIsFollowed();
-            if ($is_followed === null || $is_followed === ''){$is_followed = false;}
-            $professional->setIsFollowed($is_followed);
 
             $registrationDate = new DateTime('now', new DateTimeZone('Europe/Paris'));
             $professional->setRegistrationDate($registrationDate);

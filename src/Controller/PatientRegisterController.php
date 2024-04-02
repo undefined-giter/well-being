@@ -43,11 +43,11 @@ class PatientRegisterController extends AbstractController
 
             $patient = $form->getData();
 
-            $patient->setFirstName($this->capitalizeName($patient->getFirstName()));
+            $patient->setFirstName($patient->getFirstName());
 
-            $patient->setLastName($this->capitalizeName($patient->getLastName()));
+            $patient->setLastName($patient->getLastName());
 
-            $patient->setSlug($this->generateSlug($patient->getFirstName(), $patient->getLastName()));
+            $patient->setSlug($patient->generateSlug());
             
             $hashedPassword = $this->passwordHasher->hashPassword($patient, $patient->getPassword());
             $patient->setPassword($hashedPassword);
@@ -85,35 +85,5 @@ class PatientRegisterController extends AbstractController
         return $this->render('patient_register/index.html.twig', [
             'form' => $form->createView(),
         ]);
-    }
-
-
-    private function capitalizeName($name) {
-        $name = ucwords($name);
-        $name = preg_replace_callback('/(?:\s|-|^)([a-z])/', function($matches) {
-            return strtoupper($matches[0]);
-        }, $name);
-    
-        return $name;
-    }
-
-    private function generateSlug(string $firstName, string $lastName): string
-    {
-        $fullName = $firstName . ' ' . $lastName;
-
-        $slug = str_replace(
-            ['à', 'â', 'ä', 'á', 'ã', 'å', 'î', 'ï', 'ì', 'í', 
-            'ô', 'ö', 'ò', 'ó', 'õ', 'ø', 'ù', 'û', 'ü', 'ú', 
-            'é', 'è', 'ê', 'ë', 'ç', 'ÿ', 'ñ', ],
-            ['a', 'a', 'a', 'a', 'a', 'a', 'i', 'i', 'i', 'i', 
-            'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 
-            'e', 'e', 'e', 'e', 'c', 'y', 'n', ],
-            $fullName);
-        
-        $slug = str_replace(' ', '-', $slug);
-        $slug = strtolower($slug);
-        $slug = substr($slug, 0, 255);
-        
-        return $slug;
     }
 }

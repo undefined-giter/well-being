@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Patient;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -42,8 +42,8 @@ class SecurityController extends AbstractController
 
     private function getLastRegisteredEmail(EntityManagerInterface $entityManager): ?string
     {
-        $latestPatient = $entityManager->getRepository(Patient::class)->findOneBy([], ['id' => 'DESC']);
+        $latestUser = $entityManager->getRepository(User::class)->findOneBy([], ['id' => 'DESC']);
 
-        return $latestPatient ? $latestPatient->getEmail() : null;
+        return $latestUser ? $latestUser->getEmail() : null;
     }
 }

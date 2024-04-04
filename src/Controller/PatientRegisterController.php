@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use DateTime;
-use DateTimeZone;
 use App\Entity\Patient;
 use App\Form\PatientType;
 use Symfony\Component\Uid\Uuid;
@@ -60,14 +58,9 @@ class PatientRegisterController extends AbstractController
                 $newFileName = pathinfo($originalFileName, PATHINFO_FILENAME) . '_' . $uuid . '.' . $extension;
             }
 
-            $patient->addRoles(['patient']);
-
             $is_followed = $patient->getIsFollowed();
             if ($is_followed === null || $is_followed === ''){$is_followed = false;}
             $patient->setIsFollowed($is_followed);
-
-            $registrationDate = new DateTime('now', new DateTimeZone('Europe/Paris'));
-            $patient->setRegistrationDate($registrationDate);
             
             $session->getFlashBag()->add('success', [
                 'message' => 'You have been recorded, please login🌳',

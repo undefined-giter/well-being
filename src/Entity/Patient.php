@@ -12,6 +12,12 @@ class Patient extends User
     #[ORM\Column]
     private ?bool $is_followed = null;
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->addRoles(['patient']);
+    }
+
     public function getIsFollowed(): ?bool
     {
         return $this->is_followed;

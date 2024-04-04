@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use DateTime;
-use DateTimeZone;
 use App\Entity\Professional;
 use App\Form\ProfessionalType;
 use Symfony\Component\Uid\Uuid;
@@ -42,6 +40,7 @@ class ProfessionalRegisterController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $professional = $form->getData();
+
             // var_dump($professional);die;
             $professional->setFirstName($professional->getFirstName());
 
@@ -52,7 +51,7 @@ class ProfessionalRegisterController extends AbstractController
             $hashedPassword = $this->passwordHasher->hashPassword($professional, $professional->getPassword());
             $professional->setPassword($hashedPassword);
 
-            $pictureFile = $form->get('picture')->getData();
+            $pictureFile = $professional->getPicture();
             if ($pictureFile instanceof UploadedFile) {
                 $originalFileName = $pictureFile->getClientOriginalName();
                 $uuid = Uuid::v4()->__toString();
@@ -60,16 +59,25 @@ class ProfessionalRegisterController extends AbstractController
                 $newFileName = pathinfo($originalFileName, PATHINFO_FILENAME) . '_' . $uuid . '.' . $extension;
             }
 
-            $professional->addRoles(['professional']);
+            $specialization = $form->get('specialization')->getData();
+            $personal_specialisation = $form->get('other_specialization')->getData();
+            if (!empty($personal_specialisation)){$specialization[] = $personal_specialisation;}
+            $professional->setSpecialization($specialization);
 
-            $registrationDate = new DateTime('now', new DateTimeZone('Europe/Paris'));
-            $professional->setRegistrationDate($registrationDate);
+            $location = $professional->getLocation();
+            $professional->setLocation($location);
             
             $session->getFlashBag()->add('success', [
                 'message' => 'You have been recorded, please login🌳',
                 'duration' => 5000
             ]);
             
+            // $loc = $form->get('location')->getData();
+            // echo '<pre>';
+            // var_dump($loc);
+            // echo '</pre>';
+            // die;
+
             $entityManager->persist($professional);
             $entityManager->flush();
 

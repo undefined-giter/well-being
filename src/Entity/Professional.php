@@ -12,8 +12,8 @@ use App\Repository\ProfessionalRepository;
 #[ORM\DiscriminatorMap(["user" => User::class, "professional" => Professional::class])]
 class Professional extends User
 {
-    #[ORM\Column(type: Types::ARRAY)]
-    private array $specialization = [];
+    #[ORM\Column(type: "json")]
+    private $specialization = [];
 
     #[ORM\Column(nullable: true)]
     private ?array $location = null;
@@ -24,12 +24,18 @@ class Professional extends User
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $video = null;
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->addRoles(['professional']);
+    }
+
     public function getSpecialization(): array
     {
         return $this->specialization;
     }
 
-    public function setSpecialization(array $specialization): static
+    public function setSpecialization(array $specialization): self
     {
         $this->specialization = $specialization;
 

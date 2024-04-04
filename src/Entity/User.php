@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
@@ -51,6 +53,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $registration_date = null;
+
+    public function __construct()
+    {
+        $this->addRoles(['user']);
+        $this->registration_date = new DateTime('now', new DateTimeZone('Europe/Paris'));
+    }
 
     public function getId(): ?int
     {
@@ -229,10 +237,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->registration_date;
     }
 
-    public function setRegistrationDate(\DateTimeInterface $registration_date): static
-    {
-        $this->registration_date = $registration_date;
-
-        return $this;
-    }
+    //->Done in the constructor
+    // public function setRegistrationDate(\DateTimeInterface $registration_date): static
+    // {
+    //     $this->registration_date = new DateTime('now', new DateTimeZone('Europe/Paris'));
+    //     return $this;
+    // }
 }

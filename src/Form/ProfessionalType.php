@@ -70,8 +70,8 @@ class ProfessionalType extends AbstractType
                     'Speech therapist' => 'speech_therapist',
                     'Stress management therapist' => 'stress_management_therapist',
                 ],
-                'label' => "Specialization -> <small style='color:green'>Maintain 
-                            <b style='color:brown'>Ctrl</b> to select multiple</small>",
+                'label' => "Specialization <small>-> <span style='color:green'>Maintain 
+                            <b style='color:brown'>Ctrl</b> to select multiple</span></small>",
                 'required' => true,
                 'multiple' => true,
                 'label_html' => true,
@@ -81,12 +81,13 @@ class ProfessionalType extends AbstractType
                 ],
             ])
             ->add('other_specialization_checkbox', CheckboxType::class, [
-                'label' => '<small>Specialization not listed ?</small>',
+                'label' => "<small>Specialization not listed ? </small>",
                 'required' => false,
                 'mapped' => false,
                 'label_html' => true,
                 'attr' => [
                     'class' => 'other-specialization-checkbox',
+                    'style' => 'transform: scale(0.8);'
                 ],
             ])
             ->add('other_specialization', TextType::class, [
@@ -108,9 +109,10 @@ class ProfessionalType extends AbstractType
             ])
             ->add('online_availability', CheckboxType::class, [
                 'data' => true,
+                'label' => 'Online availability '
             ])
             ->add('irl_availability', CheckboxType::class, [
-                'label' => '<p id="irl_availability_label" style="color:orange; text-align:right">Uncheck if no place</p>',
+                'label' => '<p id="irl_availability_label" style="color:orange; text-align:right">Uncheck if no place </p>',
                 'required' => false,
                 'mapped' => false,
                 'label_html' => true,
@@ -119,14 +121,17 @@ class ProfessionalType extends AbstractType
                     'class' => 'irl_availability-checkbox',
                 ],
             ])
-            ->add('video')
+            ->add('video', TextType::class, [
+            'label' => "Youtube video link <small>-><span title='Paste type \"https://www.youtube.com/watch?v=...\"' style='cursor:pointer'>❔</span></small>",
+            'label_html' => true,
+            ])
             // ->add('roles', null)
             // ->add('slug')
             // ->add('registration_date', null, ['widget' => 'single_text'])
         ;
 
         $builder->add('save', SubmitType::class, [
-            'label' => 'Register as Professional',
+            'label' => "Register as Professional",
         ]);
 
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {

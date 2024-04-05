@@ -1,14 +1,15 @@
 <?php
 
 namespace App\Form;
-
 use App\Entity\Professional;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -33,7 +34,8 @@ class ProfessionalType extends AbstractType
                 ]
             ])
             ->add('picture', FileType::class, [
-                'label' => 'Profile Picture',
+                'label' => "Profilye Picture <small>->  <span style='color:orange'>Accepted formats <span style='color:green'>.jpg</span> or <span style='color:green'>.png</span></span></small>",
+                'label_html' => true,
                 'required' => false,
             ])
             ->add('description')
@@ -70,8 +72,8 @@ class ProfessionalType extends AbstractType
                     'Speech therapist' => 'speech_therapist',
                     'Stress management therapist' => 'stress_management_therapist',
                 ],
-                'label' => "Specialization <small>-> <span style='color:green'>Maintain 
-                            <b style='color:brown'>Ctrl</b> to select multiple</span></small>",
+                'label' => "Specialization <small>-> <span style='color:orange'>Maintain 
+                            <b style='color:green'>Ctrl</b> to select multiple</span></small>",
                 'required' => true,
                 'multiple' => true,
                 'label_html' => true,
@@ -100,11 +102,8 @@ class ProfessionalType extends AbstractType
                     'placeholder' => 'Enter your specialization',
                 ],
             ])
-            ->add('location', CollectionType::class, [
+            ->add('location', TextType::class, [
                 'label' => false,
-                'entry_type' => TextType::class,
-                'allow_add' => true,
-                'allow_delete' => true,
                 'required' => false,
             ])
             ->add('online_availability', CheckboxType::class, [
@@ -134,9 +133,19 @@ class ProfessionalType extends AbstractType
             'label' => "Register as Professional",
         ]);
 
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
+            $specialization = $form->get('specialization')->getData();
+            $otherSpecialization = $form->get('other_specialization')->getData();
+
+            if (empty($specialization) && empty($otherSpecialization)) {
+                $form->addError(new FormError('Please select a specialization or enter your specialization.'));
+            }
+        });
+
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
-            $irlAvailability = $form->get('irl_availability')->getData();
+            $irlAvailability = $form->get('location')->getData();
             $onlineAvailability = $form->get('online_availability')->getData();
 
             if (!$irlAvailability && !$onlineAvailability) {

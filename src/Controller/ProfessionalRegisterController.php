@@ -41,7 +41,6 @@ class ProfessionalRegisterController extends AbstractController
 
             $professional = $form->getData();
 
-            // var_dump($professional);die;
             $professional->setFirstName($professional->getFirstName());
 
             $professional->setLastName($professional->getLastName());
@@ -63,8 +62,10 @@ class ProfessionalRegisterController extends AbstractController
             $personal_specialisation = $form->get('other_specialization')->getData();
             if (!empty($personal_specialisation)){$specialization[] = $personal_specialisation;}
             $professional->setSpecialization($specialization);
+            
+            //echo '<pre>';var_dump($y);echo '</pre>';die;
 
-            $location = $professional->getLocation();
+            $location = $form->get('location')->getData();
             $professional->setLocation($location);
             
             $session->getFlashBag()->add('success', [
@@ -72,12 +73,7 @@ class ProfessionalRegisterController extends AbstractController
                 'duration' => 5000
             ]);
             
-            // $loc = $form->get('location')->getData();
-            // echo '<pre>';
-            // var_dump($loc);
-            // echo '</pre>';
-            // die;
-
+            
             $entityManager->persist($professional);
             $entityManager->flush();
 

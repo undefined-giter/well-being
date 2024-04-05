@@ -119,10 +119,14 @@ window.initMap = initMap;
 {% endblock %}
 
 {% block body %}
-
 <div class="container">
     <h1 class='text-center'>Professional Registration</h1>
 
+    {% if form_errors(form) %}
+    <div class="alert alert-danger">
+        {{ form_errors(form) }}
+    </div>
+    {% endif %}
     <div class="row">
         <div class="col-md-6 offset-md-3 relative">
             {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
@@ -136,7 +140,7 @@ window.initMap = initMap;
             {{ form_row(form.other_specialization_checkbox) }}
             {{ form_row(form.other_specialization) }}
             {{ form_row(form.online_availability) }}
-            {{ form_row(form.location, {'attr': {'class': 'hidden location_selector_class'}}) }}
+            {{ form_row(form.location, {'id': 'location_input'}) }}
             <p id='address'>Enter or pick your location</p>
             <div id="map" style='height:350px; border-radius:0.5em'></div>
             <div class='absolute right-[10px]'>
@@ -168,6 +172,7 @@ document.addEventListener('DOMContentLoaded', function () {
             otherSpecializationField.style.display = 'inline';
         } else {
             otherSpecializationField.style.display = 'none';
+            otherSpecializationField.value = null;
         }
     });
 });
@@ -182,22 +187,22 @@ window.addEventListener("load", function() {
     let irl_availability_label = document.querySelector('#irl_availability_label')
     let map = document.querySelector('#map')
     const addressParagraphe = document.querySelector('#address')
-    const locationInput = document.querySelector('.location_selector_class'); 
+    const locationInput = document.querySelector('#location_input');
 
     irl_availability.addEventListener('change', () =>{
+        locationInput.value = []
         if(!irl_availability.checked){
-            map.style.display= 'none'
+            map.style.display = 'none'
             addressParagraphe.style.display = 'none'
-            irl_availability_label.textContent = 'Check to share your professional place'
+            irl_availability_label.textContent = 'Check to share your professional place '
             irl_availability_label.style.color = 'green'
         }
         else{
-            irl_availability_label.textContent = 'Uncheck if no place'
-            map.style.display= 'block'
+            irl_availability_label.textContent = 'Uncheck if no place '
+            map.style.display = 'block'
             addressParagraphe.textContent = 'Enter or pick your location'
             addressParagraphe.classList.remove('text-green-600')
             addressParagraphe.style.display = 'block'
-            locationInput.value = []
             irl_availability_label.style.color = 'orange'
         }
     })
@@ -205,27 +210,29 @@ window.addEventListener("load", function() {
     const checkForResponseElement = setInterval(function() {
         const responseElement = document.querySelector("#response");
         if (responseElement) {
-            document.querySelector("#response-container").style.display = 'none'
+            let jsonLocationResponse  = document.querySelector("#response-container")
+            jsonLocationResponse.style.zIndex = -1
             clearInterval(checkForResponseElement);
 
             const observer = new MutationObserver(function(mutations) {
                 mutations.forEach(function(mutation) {
                     if (mutation.type === "childList") {
-                        const responseString = responseElement.textContent;
-                        const response = JSON.parse(responseString);
-
+                        const response = JSON.parse(jsonLocationResponse.textContent);
+                        
                         const latitude = response.results[0].geometry.location.lat;
                         const longitude = response.results[0].geometry.location.lng;
                         const address = response.results[0].formatted_address;
-
+                        
                         addressParagraphe.classList.add('text-green-600')
                         addressParagraphe.textContent = 'Address: ' + address
-
-                        locationInput.value = [
-                            { name: 'Latitude', value: latitude },
-                            { name: 'Longitude', value: longitude },
-                            { name: 'Address', value: address }
+                        
+                        const locationArray = [
+                            {name: 'Latitude', value: latitude},
+                            {name: 'Longitude', value: longitude},
+                            {name: 'Address', value: address}
                         ];
+                        const locationJSON = JSON.stringify(locationArray);
+                        locationInput.value = locationJSON;
                     }
                 });
             });

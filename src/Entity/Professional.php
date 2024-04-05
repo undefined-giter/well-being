@@ -12,11 +12,11 @@ use App\Repository\ProfessionalRepository;
 #[ORM\DiscriminatorMap(["user" => User::class, "professional" => Professional::class])]
 class Professional extends User
 {
-    #[ORM\Column(type: "json")]
+    #[ORM\Column(type: 'array')]
     private $specialization = [];
 
     #[ORM\Column(nullable: true)]
-    private ?array $location = null;
+    private ?string $location = null;
 
     #[ORM\Column]
     private ?bool $online_availability = null;
@@ -42,12 +42,12 @@ class Professional extends User
         return $this;
     }
 
-    public function getLocation(): ?array
+    public function getLocation(): ?string
     {
         return $this->location;
     }
 
-    public function setLocation(?array $location): static
+    public function setLocation(?string $location): static
     {
         $this->location = $location;
 

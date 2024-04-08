@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Form;
+use App\Form\BaseUserType;
 use App\Entity\Professional;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
@@ -18,27 +19,13 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
-class ProfessionalType extends AbstractType
+class ProfessionalType extends BaseUserType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        parent::addCommonFields($builder, $options);
+        
         $builder
-            ->add('first_name', null, ['label' => 'first name'])
-            ->add('last_name', null, ['label' => 'last name'])
-            ->add('email', null)
-            ->add('password', PasswordType::class, [
-                'label' => 'Password',
-                'attr' => [
-                    'class' => 'form-control mb-3',
-                    'placeholder' => 'Password'
-                ]
-            ])
-            ->add('picture', FileType::class, [
-                'label' => "Profilye Picture <small>->  <span style='color:orange'>Accepted formats <span style='color:green'>.jpg</span> or <span style='color:green'>.png</span></span></small>",
-                'label_html' => true,
-                'required' => false,
-            ])
-            ->add('description')
             ->add('specialization', ChoiceType::class, [
                 'choices' => [
                     'Acupuncturist' => 'acupuncturist',
@@ -124,9 +111,6 @@ class ProfessionalType extends AbstractType
             'label' => "Youtube video link <small>-><span title='Paste type \"https://www.youtube.com/watch?v=...\"' style='cursor:pointer'>❔</span></small>",
             'label_html' => true,
             ])
-            // ->add('roles', null)
-            // ->add('slug')
-            // ->add('registration_date', null, ['widget' => 'single_text'])
         ;
 
         $builder->add('save', SubmitType::class, [

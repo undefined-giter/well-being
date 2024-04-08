@@ -182,32 +182,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setSlug(string $slug): static
     {
-        $this->slug = $this->generateSlug();
+        $this->slug = $slug;
 
         return $this;
     }
-
-    public function generateSlug(): string
-    {
-        //TODO: do not use capitalizeName function, may be needed
-        $fullName = $this->getFirstName() . ' ' . $this->getLastName();
-
-        $slug = str_replace(
-            ['à', 'â', 'ä', 'á', 'ã', 'å', 'î', 'ï', 'ì', 'í', 
-            'ô', 'ö', 'ò', 'ó', 'õ', 'ø', 'ù', 'û', 'ü', 'ú', 
-            'é', 'è', 'ê', 'ë', 'ç', 'ÿ', 'ñ', ],
-            ['a', 'a', 'a', 'a', 'a', 'a', 'i', 'i', 'i', 'i', 
-            'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 
-            'e', 'e', 'e', 'e', 'c', 'y', 'n', ],
-            $fullName);
-        
-        $slug = str_replace(' ', '-', $slug);
-        $slug = strtolower($slug);
-        $slug = substr($slug, 0, 255);
-        
-        return $slug;
-    }
-
+    
     public function getPicture(): ?string
     {
         return $this->picture;

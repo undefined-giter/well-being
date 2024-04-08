@@ -10,7 +10,7 @@ use App\Repository\PatientRepository;
 class Patient extends User
 {    
     #[ORM\Column]
-    private ?bool $is_followed = null;
+    private ?bool $is_followed = false;
 
     public function __construct()
     {

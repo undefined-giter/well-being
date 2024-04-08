@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,16 +22,22 @@ class ProfessionalRegisterController extends AbstractController
     private $passwordHasher;
     private $session;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    public function __construct(UserPasswordHasherInterface $passwordHasher, SluggerInterface $slugger)
     {
         $this->passwordHasher = $passwordHasher;
+        $this->slugger = $slugger;
     }
 
     #[Route('/professional-register', name: 'professional_register')]
-    public function index(Request $request, EntityManagerInterface $entityManager, SessionInterface $session, ParameterBagInterface $params): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, SessionInterface $session, SluggerInterface $slugger, ParameterBagInterface $params): Response
     {
-        if ($this->getUser() && in_array('professional', $this->getUser()->getRoles())) {
-            $session->getFlashBag()->add('info', 'You are already registered as a professional.');
+        if ($this->getUser()) {
+            if(in_array('professional', $this->getUser()->getRoles())){
+                $session->getFlashBag()->add('info', 'You are already registered as a professional.');
+            }
+            if(in_array('patient', $this->getUser()->getRoles())){
+                $session->getFlashBag()->add('info', 'You are registered as a patient and can\'t register as a professional.');
+            }
             return $this->redirectToRoute('login');
         }
 
@@ -45,25 +52,34 @@ class ProfessionalRegisterController extends AbstractController
 
             $professional->setLastName($professional->getLastName());
 
-            $professional->setSlug($professional->generateSlug());
+            $professional->setSlug($this->slugger->slug($professional->getLastName())->lower());
             
             $hashedPassword = $this->passwordHasher->hashPassword($professional, $professional->getPassword());
             $professional->setPassword($hashedPassword);
 
-            $pictureFile = $professional->getPicture();
-            if ($pictureFile instanceof UploadedFile) {
-                $originalFileName = $pictureFile->getClientOriginalName();
+            $pictureFile = $form->get('picture')->getData();
+            if ($pictureFile) {
+                $originalFileName = pathinfo($pictureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $slugifiedFileName = $this->slugger->slug($originalFileName);
                 $uuid = Uuid::v4()->__toString();
                 $extension = $pictureFile->getClientOriginalExtension();
-                $newFileName = pathinfo($originalFileName, PATHINFO_FILENAME) . '_' . $uuid . '.' . $extension;
+                $finalFileName = $slugifiedFileName . '_' . $uuid . '.' . $extension;
+    
+                try{
+                    $pictureFile->move(
+                        $params->get('pictureProfile_directory'),
+                        $finalFileName
+                    );
+                    $professional->setPicture($finalFileName);
+                }catch(FileException $e){
+                    throw new \RuntimeException('Problem happened the upload of the profile picture: ' . $e->getMessage());
+                }
             }
 
             $specialization = $form->get('specialization')->getData();
             $personal_specialisation = $form->get('other_specialization')->getData();
             if (!empty($personal_specialisation)){$specialization[] = $personal_specialisation;}
             $professional->setSpecialization($specialization);
-            
-            //echo '<pre>';var_dump($y);echo '</pre>';die;
 
             $location = $form->get('location')->getData();
             $professional->setLocation($location);

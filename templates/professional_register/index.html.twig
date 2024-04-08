@@ -140,7 +140,7 @@ window.initMap = initMap;
             {{ form_row(form.other_specialization_checkbox) }}
             {{ form_row(form.other_specialization) }}
             {{ form_row(form.online_availability) }}
-            {{ form_row(form.location, {'id': 'location_input'}) }}
+            {{ form_row(form.location, {'id': 'location_input', 'attr': {'style': 'display: none;'}}) }}
             <p id='address'>Enter or pick your location</p>
             <div id="map" style='height:350px; border-radius:0.5em'></div>
             <div class='absolute right-[10px]'>

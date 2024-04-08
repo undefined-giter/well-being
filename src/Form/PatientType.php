@@ -3,39 +3,30 @@
 namespace App\Form;
 
 use App\Entity\Patient;
-use Symfony\Component\Form\AbstractType;
+use App\Form\BaseUserType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
-class PatientType extends AbstractType
+
+class PatientType extends BaseUserType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add('first_name', null, ['label' => 'first name'])
-            ->add('last_name', null, ['label' => 'last name'])
-            ->add('email', null)
-            ->add('password', PasswordType::class, [
-                'label' => 'Password',
-                'attr' => [
-                    'class' => 'form-control mb-3',
-                    'placeholder' => 'Password'
-                ]
-            ])
-            ->add('picture', FileType::class, [
-                'label' => 'Profile Picture',
-                'required' => false,
-                'mapped' => false,
-            ])
-            ->add('description')
+        parent::addCommonFields($builder, $options);
+        // $builder
+            // ->add('first_name')
+            // ->add('last_name')
+            // ->add('email')
+            // ->add('password')
+            // ->add('picture')
+            // ->add('description')
+
             // ->add('slug')
             // ->add('roles', null)
-            // ->add('registration_date', null, ['widget' => 'single_text'])
+            // ->add('registration_date')
             // ->add('is_followed')
-        ;
+        // ;
 
         $builder->add('save', SubmitType::class, [
             'label' => 'Register As Patient',

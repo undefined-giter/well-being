@@ -3,3 +3,14 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+personnal_page:
+    path: /page-of-{slug}
+    controller: App\Controller\PersonnalPageController::index
+    methods: [GET]
+
+
+patient_update:
+    path: /patient_update
+    controller: App\Controller\UpdatePatientController::index
+    methods: [GET]

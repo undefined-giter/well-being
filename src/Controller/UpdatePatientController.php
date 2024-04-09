@@ -4,10 +4,10 @@ namespace App\Controller;
 
 use AppEntityPatient;
 use AppFormUpdatePatientType;
-use SymfonyBundleFrameworkBundleControllerAbstractController;
 use SymfonyComponentHttpFoundationRequest;
 use SymfonyComponentHttpFoundationResponse;
 use SymfonyComponentRoutingAnnotationRoute;
+use SymfonyBundleFrameworkBundleControllerAbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class UpdatePatientController extends AbstractController

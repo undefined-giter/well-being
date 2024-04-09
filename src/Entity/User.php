@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use DateTime;
 use DateTimeZone;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
@@ -181,11 +183,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     public function setSlug(string $slug): static
-    {
-        $this->slug = $slug;
+{
+    $uuid = Uuid::uuid4();
+    $uuidString = $uuid->toString();
 
-        return $this;
-    }
+    $this->slug = $slug . '-' . $uuidString;
+
+    return $this;
+}
     
     public function getPicture(): ?string
     {
@@ -215,11 +220,4 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->registration_date;
     }
-
-    //->Done in the constructor
-    // public function setRegistrationDate(\DateTimeInterface $registration_date): static
-    // {
-    //     $this->registration_date = new DateTime('now', new DateTimeZone('Europe/Paris'));
-    //     return $this;
-    // }
 }

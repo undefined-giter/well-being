@@ -25,7 +25,7 @@ class PatientRegisterController extends AbstractController
     private $session;
     private $slugger;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher,SluggerInterface $slugger)
+    public function __construct(UserPasswordHasherInterface $passwordHasher, SluggerInterface $slugger)
     {
         $this->passwordHasher = $passwordHasher;
         $this->slugger = $slugger;
@@ -51,12 +51,15 @@ class PatientRegisterController extends AbstractController
 
             $patient = $form->getData();
 
-            // Easier to reapeat some code on 2 controllers than making a service
+            // Easier to reapeat some code on 3 controllers than making a service
             $patient->setFirstName($patient->getFirstName());
 
             $patient->setLastName($patient->getLastName());
 
-            $patient->setSlug($this->slugger->slug($patient->getLastName())->lower());
+            $firstName = $patient->getFirstName();
+            $lastName = $patient->getLastName();
+            $slug = $this->slugger->slug($firstName . '-' . $lastName)->lower();
+            $patient->setSlug($slug);
             
             $hashedPassword = $this->passwordHasher->hashPassword($patient, $patient->getPassword());
             $patient->setPassword($hashedPassword);
@@ -79,7 +82,7 @@ class PatientRegisterController extends AbstractController
                     throw new \RuntimeException('Problem happened the upload of the profile picture: ' . $e->getMessage());
                 }
             }
-            // end of repeated code -> ProfessionalRegisterController
+            // end of repeated code -> ProfessionalRegisterController -> UpdatedPatientController
 
             $is_followed = $patient->getIsFollowed();
             if ($is_followed === null || $is_followed === ''){$is_followed = false;}

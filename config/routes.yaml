@@ -4,13 +4,18 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-personnal_page:
+personal_page:
     path: /page-of-{slug}
-    controller: App\Controller\PersonnalPageController::index
+    controller: App\Controller\PersonalPageController::index
     methods: [GET]
 
 
 patient_update:
-    path: /patient_update
+    path: /patient-update
     controller: App\Controller\UpdatePatientController::index
-    methods: [GET]
+    methods: [GET, POST]
+
+professional_update:
+    path: /professional-update
+    controller: App\Controller\UpdateProfessionalController::index
+    methods: [GET, POST]

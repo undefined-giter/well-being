@@ -5,6 +5,7 @@ namespace App\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -15,16 +16,44 @@ abstract class BaseUserType extends AbstractType
     protected function addCommonFields(FormBuilderInterface $builder)
     {
         $builder
-            ->add('first_name', TextType::class, ['label' => 'First Name'])
-            ->add('last_name', TextType::class, ['label' => 'Last Name'])
+            ->add('first_name', TextType::class, [
+                'label' => 'First Name',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your first name'
+                    ])
+                ]
+            ])
+            ->add('last_name', TextType::class, [
+                'label' => 'Last Name',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your last name'
+                    ])
+                ]
+            ])
             ->add('email', EmailType::class, [
                 'label' => 'Email Address',
+                'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter your email address'
+                    ])
+                ]
             ])
             ->add('password', PasswordType::class, [
                 'label' => 'Password',
+                'required' => true,
                 'attr' => [
                     'class' => 'form-control mb-3',
                     'placeholder' => 'Password'
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter a password'
+                    ])
                 ]
             ])
             ->add('picture', FileType::class, [

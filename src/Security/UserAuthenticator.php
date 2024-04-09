@@ -49,10 +49,10 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
         if ($user) {
             $slug = $user->getSlug();
-            return new RedirectResponse($this->urlGenerator->generate('personnal_page', ['slug' => $slug]));
+            return new RedirectResponse($this->urlGenerator->generate('personal_page', ['slug' => $slug]));
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('personnal_page'));
+        return new RedirectResponse($this->urlGenerator->generate('personal_page'));
     }
 
     protected function getLoginUrl(Request $request): string

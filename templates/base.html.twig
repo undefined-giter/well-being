@@ -10,7 +10,7 @@
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
-        {% block stylesheet %}{% endblock %}
+        <style>{% block stylesheet %}{% endblock %}</style>
         {% block map_head %}{% endblock %}
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}

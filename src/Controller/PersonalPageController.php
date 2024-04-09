@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class PersonnalPageController extends AbstractController
+class PersonalPageController extends AbstractController
 {
     private $entityManager;
 
@@ -27,17 +27,16 @@ class PersonnalPageController extends AbstractController
             return $this->redirectToRoute('homepage');
         }
 
-        $googleMapsApiKey = $params->get('GOOGLE_MAPS_API_KEY');
-
         $user = $this->getUser();
         if (!$user || $user->getId() != $page_user->getId() ) { 
+            $googleMapsApiKey = $params->get('GOOGLE_MAPS_API_KEY');
             return $this->render('page_of/index.html.twig', [
                 'pu' => $page_user,
                 'googleMapsApiKey' => $googleMapsApiKey,
             ]);
         }
 
-        return $this->render('personnal_page/index.html.twig', [
+        return $this->render('personal_page/index.html.twig', [
             'pu' => $page_user,
         ]);
     }

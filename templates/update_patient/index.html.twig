@@ -1,24 +1,52 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Update your profile{% endblock %}
+{% block stylesheet %}
+.align-right {float: right; margin-right: 15px;}
+{% endblock %}
+
+{% block title %}Update Your Profile{% endblock %}
 
 {% block body %}
     <div class="container">
-        <h1 class='text-center'>Update Profile</h1>
+        {% for flash_message in app.session.flashbag.get('danger') %}
+            <div class="alert alert-danger mx-6">
+                {{ flash_message }}
+            </div>
+        {% endfor %}
+
+        <h1 class='text-center'>Update Your Patient Profile</h1>
 
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+
+
                 {{ form_row(form.first_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'First Name'}}) }}
                 {{ form_row(form.last_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Last Name'}}) }}
                 {{ form_row(form.email, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Email'}}) }}
-                {{ form_row(form.password, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Password'}}) }}
+                {% if profilePicture %}
+                <div class='flex'>
+                    Current profile picture: <img src="{{ asset('profilesPictures/' ~ profilePicture) }}" alt="Current Profile Picture" style="height: 50px; border-radius: 50%; margin-bottom: -20px;">
+                </div>
+                {% endif %}
                 {{ form_row(form.picture, {'attr': {'class': 'form-control mb-3'}}) }}
                 {{ form_row(form.description, {'attr': {'class': 'form-control mb-3', 'rows': '4', 'placeholder': 'Description'}}) }}
+                {{ form_row(form.is_followed, {
+                    'label': 'Are you under professional care in here? ',
+                    'label_attr': {'class': 'checkbox-label'},
+                    'widget_type': 'inline',
+                    'attr': {'class': 'custom-checkbox'}
+                }) }}
+                <p class='text-orange-600 text-sm mb-3'>
+                    Check only if you no longer wish to appear in the available patient list
+                    <br><small>(Only professionals can see this list)</small>
+                </p>
+                {{ form_row(form.hidden_original_picture, {'attr': {'style': 'display:none;', 'value': profilePicture } }) }}
+                {# {{ form_row(form.password, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Password'}}) }} #}
+
                 {{ form_row(form._token) }}
-                <div style="text-align: right; margin-right: 20px">
-                    {{ form_row(form.save) }}
-                </div>
+
                 {{ form_end(form) }}
             </div>
         </div>

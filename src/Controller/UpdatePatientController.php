@@ -64,7 +64,9 @@ class UpdatePatientController extends AbstractController
             $slug = $this->slugger->slug($firstName . '-' . $lastName)->lower();
             $patient->setSlug($slug);
             
-            if ($patient->getPicture() == NULL) {
+            if ($form->get('delete_picture')->getData()) {
+                $patient->setPicture('');
+            }elseif ($patient->getPicture() == NULL) {
                 $patient->setPicture($form->get('hidden_original_picture')->getData());
             }else{
                 $pictureFile = $form->get('picture')->getData();
@@ -87,6 +89,16 @@ class UpdatePatientController extends AbstractController
                 }
             }
 
+            if ($form->get('delete_interestedIn')->getData()) {
+                $patient->setInterestedIn([]);
+            }elseif (!$form->get('interestedIn')->getData()) {
+                $originalInterests = json_decode($form->get('hidden_original_interests')->getData(), true);
+                $patient->setInterestedIn($originalInterests);
+            }else{
+                $interestedIn = $form->get('interestedIn')->getData();
+                $patient->setInterestedIn($interestedIn);
+            }
+
             $this->entityManager->persist($patient);
             $this->entityManager->flush();
 
@@ -100,6 +112,7 @@ class UpdatePatientController extends AbstractController
         return $this->render('update_patient/index.html.twig', [
             'form' => $form->createView(),
             'profilePicture' => $original_patient->getPicture(),
+            'originalInterests' => json_encode($original_patient->getInterestedIn()),
         ]);
     }
 }

@@ -22,15 +22,25 @@ class UpdatePatientType extends UpdateBaseUserType
                 'label' => 'Profile Picture',
                 'data' => null,
             ])
+            ->add('delete_picture', CheckboxType::class, [
+                'label' => 'Delete current profile picture',
+                'mapped' => false,
+                'required' => false,
+            ])
+            ->add('delete_interestedIn', CheckboxType::class, [
+                'label' => 'Delete current profile picture',
+                'mapped' => false,
+            ])
             ->add('is_followed', CheckboxType::class, [
                 'label' => 'Are you under professional care in here?',
-                'required' => false,
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Modify Profile',
                 'attr' => ['class' => 'btn btn-primary align-right'],
             ])
             ->add('hidden_original_picture', HiddenType::class, [
+                'mapped' => false,
+            ])->add('hidden_original_interests', HiddenType::class, [
                 'mapped' => false,
             ]);
     }

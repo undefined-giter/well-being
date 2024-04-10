@@ -52,10 +52,10 @@ class ProfessionalRegisterController extends AbstractController
 
             $professional->setLastName($professional->getLastName());
 
-            $firstName = $patient->getFirstName();
-            $lastName = $patient->getLastName();
+            $firstName = $professional->getFirstName();
+            $lastName = $professional->getLastName();
             $slug = $this->slugger->slug($firstName . '-' . $lastName)->lower();
-            $patient->setSlug($slug);
+            $professional->setSlug($slug);
             
             $hashedPassword = $this->passwordHasher->hashPassword($professional, $professional->getPassword());
             $professional->setPassword($hashedPassword);

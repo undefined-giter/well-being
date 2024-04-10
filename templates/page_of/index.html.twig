@@ -1,47 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ user.first_name }} {{ user.last_name }} page{% endblock %}
+{% block title %}{{ pu.firstName }} {{ pu.lastName }} page{% endblock %}
 
 
 {% block body %}
     <div>
+        {% if pu.picture %}
+            <img src="{{ asset('profilesPictures/' ~ pu.picture) }}" alt="Your Profile Picture" style="height: 150px; border-radius: 50%;" class='mx-auto'>
+        {% endif %}
         <h1>Welcome to {{ pu.firstName }} {{ pu.lastName }}'s page</h1>
         <p>Description:<br>{{ pu.description }}</p>
         <p>Is a {% for role in pu.roles|slice(1) %}* {{ role }}{% endfor %}</p>
-        <p>And member of <span class='text-green-600'>Well-Being<span> since: {{ pu.registration_date|date('F Y') }}</p>
+        <p>And member of <span class='text-green-600'>Well-Being<span> since: {{ pu.registrationDate|date('F Y') }}</p>
+
+        {% if 'patient' in pu.roles and pu.interestedIn is not empty %}
+            <p><span class='text-green-700 text-sm'>His domains of interests :<br>
+                {% for interest in pu.interestedIn %}
+                    <span class='text-green-700 text-sm'>                         *</span></span> {{ interest }}<br>
+                {% endfor %}
+            </p>
+        {% endif %}
 
         {% if 'professional' in pu.roles %}
             <p>Is specialized in :{% for spe in pu.specialization %}<br>        * {{ spe }}{% endfor %}</p>
-        {% endif %}
-        {% if pu.online_availability %}<p>Can be reach online for your session!</p>{% endif %}
-        {% if pu.location %}
-            <p>{{ pu.location[2].value }}</p>
+            {% if pu.onlineAvailability %}<p>Can be reach online for your session!</p>{% endif %}
+            {% if pu.location %}
+                <p>{{ address }}</p>
+                <p>{{ latitude }}</p>
+                <p>{{ longitude }}</p>
+            {% endif %}
+            {% if pu.video %}
+                {% set videoId = pu.video|split('/')|last %}
 
-            {% set locationQuery = '' . pu.location[0].value . ',' . pu.location[1].value %}
-            {% set addressQuery = pu.location[2].value %}
+                {% set embedUrl = 'https://www.youtube.com/embed/' ~ videoId %}
 
-            <iframe
-                width="600"
-                height="450"
-                style="border:0"
-                loading="lazy"
-                allowfullscreen
-                referrerpolicy="no-referrer-when-downgrade"
-                src="https://www.google.com/maps/embed/v1/place?key={{ googleMapsApiKey }}"
-                    {% if addressQuery is defined %}
-                    {% set encodedAddress = addressQuery|url_encode %}
-                    src="{{ src ~ '&q=' ~ encodedAddress }}"
-                    {% else %}
-                    src="{{ src ~ '&q=' ~ locationQuery }}"
-                    {% endif %}
-                ></iframe>
-        {% endif %}
-        {% if pu.video %}
-            {% set videoId = pu.video|split('/')|last %}
-
-            {% set embedUrl = 'https://www.youtube.com/embed/' ~ videoId %}
-
-            <iframe width="560" height="315" src="{{ embedUrl }}" frameborder="0" allowfullscreen></iframe>
+                <iframe width="560" height="315" src="{{ embedUrl }}" frameborder="0" allowfullscreen></iframe>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}

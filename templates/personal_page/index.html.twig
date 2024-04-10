@@ -17,10 +17,20 @@ p, button{margin-bottom: 0.7em}
                 <p class='text-center'>No profile picture uploaded yet.</p>
             {% endif %}
 
-            <p><span class='text-green-700 text-sm'>Your first name: </span>{{ pu.firstName }}</p>
-            <p><span class='text-green-700 text-sm'>Your last name: </span>{{ pu.lastName }}</p>
-            <p><span class='text-green-700 text-sm'>Your email: </span>{{ pu.email }}</p>
+            <p><span class='text-green-700 text-sm'>Your first name:  </span>{{ pu.firstName }}</p>
+            <p><span class='text-green-700 text-sm'>Your last name:  </span>{{ pu.lastName }}</p>
+            <p><span class='text-green-700 text-sm'>Your email:         </span>{{ pu.email }}</p>
             <p><span class='text-green-700 text-sm'>Your description: </span>{{ pu.description }}{% if pu.description is empty %}No description yet.{% endif %}</p>
+
+            {% if 'patient' in pu.roles and pu.interestedIn is not empty %}
+                <p><span class='text-green-700 text-sm'>Your domains of interests :<br>
+                    {% for interest in pu.interestedIn %}
+                        <span class='text-green-700 text-sm'>                          *</span></span> {{ interest }}<br>
+                    {% endfor %}
+                </p>
+            {% else %}
+                <p><span class='text-green-700 text-sm'>No domain of interest registered yet.</p>
+            {% endif %}
 
             {% if 'professional' in pu.roles %}
                 <p><span class='text-green-700 text-sm'>Your specialization{% if pu.specialization|length > 1 %}s:</span>
@@ -29,15 +39,16 @@ p, button{margin-bottom: 0.7em}
                 :</span>
                     {{ pu.specialization[0] }}
                 {% endif %}</p>
-                <p>
-                    <span class='text-green-700 text-sm'>You are registered as :</span>
-                    {% for role in pu.roles|slice(1) %}
-                        {{ role }} 
-                    {% endfor %}
-                </p>
             {% endif %}
+            <p>
+                <span class='text-green-700 text-sm'>Registered as :</span>
+                   
+                {% for role in pu.roles|slice(1) %}
+                    {{ role }} 
+                {% endfor %}
+            </p>
             
-            <p><span class='text-green-700 text-sm'>Member since: </span>{{ pu.registrationDate|date('F Y') }}</p>
+            <p><span class='text-green-700 text-sm'>Member since:     </span>{{ pu.registrationDate|date('F Y') }}</p>
 
             <div class="text-right">
                 {% if 'professional' in pu.roles and 'patient' not in pu.roles %}

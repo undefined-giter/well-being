@@ -5,6 +5,28 @@
 {% block body %}
 
 <div>
+    {% if app.request.query.get('error') %}
+        <div class="alert alert-danger mx-12 error">
+            {{ app.request.query.get('error') }}
+        </div>
+    {% endif %}
+
     <h1>Homepage</h1>
 </div>
+{% endblock %}
+
+{% block js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.location.search.includes('error')) {
+            const errorElement = document.querySelector('.error');
+            if (errorElement) {
+                setTimeout(function() {
+                    errorElement.style.display = 'none';
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }, 5000);
+            }
+        }
+    });
+</script>
 {% endblock %}

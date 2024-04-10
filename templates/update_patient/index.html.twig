@@ -27,24 +27,38 @@
                 {{ form_row(form.email, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Email'}}) }}
                 {% if profilePicture %}
                 <div class='flex'>
-                    Current profile picture: <img src="{{ asset('profilesPictures/' ~ profilePicture) }}" alt="Current Profile Picture" style="height: 50px; border-radius: 50%; margin-bottom: -20px;">
+                    Your current profile picture: <img src="{{ asset('profilesPictures/' ~ profilePicture) }}" alt="Current Profile Picture" style="height: 50px; border-radius: 50%; margin: 0 0 -26px 42px;">
                 </div>
+                {{ form_row(form.delete_picture, {
+                    'label': 'Check to delete your profile picture ',
+                    'label_attr': {'class': 'checkbox-label text-sm'},
+                    'widget_type': 'inline',
+                    'attr': {'class': 'custom-checkbox'}
+                }) }}
                 {% endif %}
                 {{ form_row(form.picture, {'attr': {'class': 'form-control mb-3'}}) }}
                 {{ form_row(form.description, {'attr': {'class': 'form-control mb-3', 'rows': '4', 'placeholder': 'Description'}}) }}
+                {{ form_row(form.interestedIn, {'label_attr': {'class': 'd-block'}, 'attr': {'class': 'form-control', 'style': 'height: 200px; display: inline-block; vertical-align: top;'}}) }}
+                {{ form_row(form.delete_interestedIn, {
+                    'label': 'Check to delete your domains of interest ',
+                    'label_attr': {'class': 'checkbox-label text-sm'},
+                    'widget_type': 'inline',
+                    'attr': {'class': 'custom-checkbox'}
+                }) }}
                 {{ form_row(form.is_followed, {
                     'label': 'Are you under professional care in here? ',
                     'label_attr': {'class': 'checkbox-label'},
                     'widget_type': 'inline',
-                    'attr': {'class': 'custom-checkbox'}
+                    'attr': {'class': 'custom-checkbox mt-3'}
                 }) }}
                 <p class='text-orange-600 text-sm mb-3'>
                     Check only if you no longer wish to appear in the available patient list
-                    <br><small>(Only professionals can see this list)</small>
+                    <br><small>(Only professionals can see the list)</small>
                 </p>
                 {{ form_row(form.hidden_original_picture, {'attr': {'style': 'display:none;', 'value': profilePicture } }) }}
+                {{ form_row(form.hidden_original_interests, {'attr': {'style': 'display:none;', 'value': originalInterests } }) }}
                 {# {{ form_row(form.password, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Password'}}) }} #}
-
+                {{originalInterests}}
                 {{ form_row(form._token) }}
 
                 {{ form_end(form) }}

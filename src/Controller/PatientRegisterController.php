@@ -84,6 +84,9 @@ class PatientRegisterController extends AbstractController
             }
             // end of repeated code -> ProfessionalRegisterController -> UpdatedPatientController
 
+            $interestedIn = $form->get('interestedIn')->getData();
+            $patient->setInterestedIn($interestedIn);
+
             $is_followed = $patient->getIsFollowed();
             if ($is_followed === null || $is_followed === ''){$is_followed = false;}
             $patient->setIsFollowed($is_followed);

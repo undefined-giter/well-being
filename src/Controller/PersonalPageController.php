@@ -55,10 +55,10 @@ class PersonalPageController extends AbstractController
                 'latitude' => $latitude,
                 'longitude' => $longitude,
             ]);
+        }else{
+            return $this->render('personal_page/index.html.twig', [
+                'pu' => $page_user,
+            ]);
         }
-
-        return $this->render('personal_page/index.html.twig', [
-            'pu' => $page_user,
-        ]);
     }
 }

@@ -1,6 +1,88 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ListPatientController!{% endblock %}
+{% block title %}Patients List{% endblock %}
 
 {% block body %}
+<h1 class="text-center mt-2 mb-4">Free Patients List</h1>
+
+{% if freePatientsSummary is empty %}
+    <div class='mx-auto'>
+        <p>No patient registered for your rechearch, please seek for another speciality<p>
+        <form id="filterForm" class="flex" method="get" action="{{ path('list_patient') }}">
+            <input type="text" name="interestFilter" placeholder="Filter by Interest">
+            <button type="submit" class="bg-blue-500 text-white mr-4 px-2 rounded-r">Filter</button>
+        </form>
+        <button><a href="{{ path('list_patient') }}" class='px-2'>Reset</a></button>
+    </div>
+{% else %}
+    <div class='mx-4'>
+        <table class='mx-auto text-center'>
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th class="flex items-center justify-end mx-6">
+                        <span class="ml-12">                             </span>
+                        <span class="mx-auto"> </span>
+                        <span class="mx-auto">Interests</span>
+                        <form id="filterForm" class="flex" method="get" action="{{ path('list_patient') }}">
+                            <input type="text" name="interestFilter" placeholder="Filter by Interest">
+                            <button type="submit" class="bg-blue-500 text-white mr-4 px-2 rounded-r">Filter</button>
+                        </form>
+                        <button><a href="{{ path('list_patient') }}" class='px-2'>Reset</a></button>
+                    </th>
+                    <th>Page</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700">
+                {% for patient in freePatientsSummary %}
+                    <tr style="height: 48px;">
+                        <td class="border px-3 py-2 text-center" style="max-width: 180px;">
+                            <div style="white-space: nowrap; overflow: auto;">
+                                {{ patient.firstName }}
+                            </div>
+                        </td>
+                        <td class="border px-3 py-2 text-center" style="max-width: 180px;">
+                            <div style="white-space: nowrap; overflow: auto;">
+                                {{ patient.lastName }}
+                            </div>
+                        </td>
+                        <td class="border px-3 py-2 text-center" style="max-width: 1000px;">
+                            {% if patient.interestedIn is empty %}
+                                No interest registered yet.
+                            {% else %}
+                                <div style="white-space: nowrap; overflow: auto;">
+                                    {% for interest in patient.interestedIn %}
+                                        {{ interest }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td class="border text-center">
+                            <a href="{{ path('personal_page', {'slug': patient.slug}) }}" target='_blank' style="font-size:40px;">
+                                ➡️
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const interestFilterInput = document.getElementById('interestFilterInput');
+        const filterForm = document.getElementById('filterForm');
+
+        interestFilterInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                filterForm.submit();
+            }
+        });
+    });
+</script>
 {% endblock %}

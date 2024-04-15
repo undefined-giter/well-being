@@ -6,14 +6,6 @@ use App\Entity\Patient;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Patient>
- *
- * @method Patient|null find($id, $lockMode = null, $lockVersion = null)
- * @method Patient|null findOneBy(array $criteria, array $orderBy = null)
- * @method Patient[]    findAll()
- * @method Patient[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class PatientRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -22,16 +14,25 @@ class PatientRepository extends ServiceEntityRepository
     }
 
     /**
-     * Retourne un résumé des patients triés par date d'inscription décroissante
+     * Retrieve a summary of free patients with optional interest filtering.
      *
+     * @param string|null $interestFilter
      * @return array
      */
-    public function findPatientSummary(): array
+    public function findFreePatientSummary(?string $interestFilter = null): array
     {
-        return $this->createQueryBuilder('pa')
-            ->select('pa.firstName', 'pa.lastName', 'pa.description', 'pa.slug')
-            ->orderBy('pa.registrationDate', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $qb = $this->createQueryBuilder('p');
+
+        $qb->select('p')
+            ->andWhere('p.is_followed = 0')
+            ->orderBy('p.registration_date', 'DESC');
+
+        if ($interestFilter !== null) {
+            // Utilisation d'une expression LIKE pour filtrer par intérêt
+            $qb->andWhere($qb->expr()->like('p.interestedIn', ':interest'))
+               ->setParameter('interest', '%' . $interestFilter . '%');
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }

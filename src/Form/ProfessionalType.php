@@ -33,7 +33,7 @@ class ProfessionalType extends BaseUserType
                     'Aromatherapist' => 'Aromatherapist',
                     'Art Therapist' => 'Art Therapist',
                     'Chiropractor' => 'Chiropractor',
-                    'Cognitive-Behavioral Therapist (CBT)' => 'Cognitive-Behavioral Therapist (CBT)',
+                    'Cognitive-Behavioral Therapist' => 'Cognitive-Behavioral Therapist',
                     'Emotion Management Therapist' => 'Emotion Management Therapist',
                     'Energy Specialist' => 'Energy Specialist',
                     'Family and Couple Therapist' => 'Family and Couple Therapist',

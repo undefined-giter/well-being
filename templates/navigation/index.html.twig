@@ -14,28 +14,42 @@
 }
 </style>
 
-<nav class="flex flex-wrap items-center justify-between w-full mt-2">
+<nav class='mx-6 mt-2'>
     <ul class="flex justify-between w-full">
-        <li class="mx-6">
-            <a href="{{ path('homepage') }}">
-                <img src='{{ asset('img/wellBeing.png') }}' width='22px' alt='Well-Being icon'>
-            </a>
-        </li>
-        <li class="mr-6 relative flex justify-end">
+        <div class="flex items-center">
+            <li class="mr-6">
+                <a href="{{ path('homepage') }}">
+                    <img src="{{ asset('img/wellBeing.png') }}" width="30px" alt="Well-Being icon" title='homepage'>
+                </a>
+            </li>
+            <li>
+                <a href="{{ path('list_professional') }}">
+                    <i class="fas fa-solid fa-list-ul text-cyan-400" style="font-size:28px" alt="Professional List" title='List of Professional'></i>
+                </a>
+            </li>
+            {% if app.user is not null and app.user.roles is not empty and 'professional' in app.user.roles %}
+                <li class='ml-6'>
+                    <a href="{{ path('list_patient') }}">
+                        <i class="fas fa-solid fa-list text-sky-600" style="font-size:28px" alt="Patient List" title='List of Available Patient'></i>
+                    </a>
+                </li>
+            {% endif %}
+        </div>
+        <div class="flex items-center">
             {% if not app.user %}
-                <div class='register-link'>
-                    <i class="fas fa-user cursor-pointer"></i>
+                <div class="register-link relative">
+                    <i class="fas fa-user mx-3 cursor-pointer text-lime-500" style="font-size:26px" alt="Register" title='Register To Our Community'></i>
                     <ul class="register-dropdown absolute -right-5 top-full rounded">
-                        <li><a href="{{ path('patient_register') }}" class='block p-2 text-green-500 hover:bg-green-100 rounded'>Patient</a></li>
-                        <li><a href="{{ path('professional_register') }}" class='block p-2 text-amber-400 hover:bg-amber-100 rounded'>Professional</a></li>
+                        <li><a href="{{ path('patient_register') }}" class="block p-2 text-emerald-500 hover:bg-green-100 rounded" title='Welcome To Our Community'>Patient</a></li>
+                        <li><a href="{{ path('professional_register') }}" class="block p-2 text-amber-400 hover:bg-amber-100 rounded" title='Register and Find Your Next Patient'>Professional</a></li>
                     </ul>
                 </div>
                 {% if loginPage is not defined %}
-                    <a href="{{ path('login') }}"><i class="fas fa-sign-in-alt ml-4 cursor-pointer"></i></a>
+                    <a href="{{ path('login') }}" class="mx-3"><i class="fas fa-sign-in-alt cursor-pointer text-emerald-500" style="font-size:28px" alt="Login" title='Login'></i></a>
                 {% endif %}
             {% else %}
-                <a href="{{ path('logout') }}"><i class="fas fa-sign-out-alt"></i></a>
+                <a href="{{ path('logout') }}" class="mx-3"><i class="fas fa-sign-out-alt ml-6 text-red-600" style="font-size:28px" alt="Logout" title='Logout'></i></a>
             {% endif %}
-        </li>
+        </div>
     </ul>
 </nav>

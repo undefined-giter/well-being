@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Professionals List{% endblock %}
+
+{% block stylesheet %}
+.overflowSpe{
+    max-height: 72px !important;
+    overflow-y: auto !important;
+}
+.location{
+    width: 280px !important;
+    max-height: 72px !important;
+    overflow: auto !important;
+}
+{% endblock %}
+
+{% block body %}
+    <h1 class="text-center mt-2 mb-4">Registered Professionals</h1>
+
+    {% if professionalSummary is empty %}
+        <div class="mx-auto text-center">
+            <p>No professionals registered for the specified criteria.</p>
+            <form id="filterForm" class="flex items-center justify-center mt-4" method="get" action="{{ path('app_list_professional') }}">
+                <input type="text" name="interestFilter" placeholder="Filter by Specialization" class="border border-gray-400 rounded-l px-4 py-2 focus:outline-none focus:border-blue-500">
+                <button type="submit" class="bg-blue-500 text-white rounded-r px-4 py-2 ml-2">Filter</button>
+            </form>
+            <a href="{{ path('app_list_professional') }}" class="block mt-2 text-blue-500">Reset Filter</a>
+        </div>
+    {% else %}
+        <div class="mx-4">
+            <table class="text-center table-auto mx-auto">
+                <thead>
+                    <tr class="bg-gray-800 text-white">
+                        <th class="px-4 py-2">First Name</th>
+                        <th class="px-4 py-2">Last Name</th>
+                        <th class="px-4 py-2">Specializations</th>
+                        <th class="px-4 py-2">Location</th>
+                        <th class="px-4 py-2">Available Online</th>
+                        <th class="px-4 py-2">Page</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700">
+                    {% for professional in professionalSummary %}
+                        <tr>
+                            <td class="border px-4 py-2">{{ professional.first_name }}</td>
+                            <td class="border px-4 py-2">{{ professional.last_name }}</td>
+                            <td class="border px-4 py-2">
+                                {% if professional.specialization is empty %}
+                                    <p>No specializations registered yet, which is not supposed to be</p>
+                                {% else %}
+                                    <ul class="list-disc list-inside text-left overflow-hidden overflowSpe">
+                                        {% for specialization in professional.specialization %}
+                                            <li>{{ specialization }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </td>
+                            <td class="border px-4 py-2 location">
+                                {% if professional.location == null %}
+                                    <p>Available Online</p>
+                                {% else %}
+                                    {% set parts = professional.location|split(',') %}
+                                    {% set location = parts|slice(-2, 1)|first|replace({'"': '', ':': '', 'value': ''}) %}
+                                    <p>{{ location }}</p>
+                                {% endif %}
+                            </td>
+                            <td class="border px-4 py-2 cursor-default select-none" style="font-size:38px;">{{ professional.online_availability ? '🟢' : '🔴' }}</td>
+                            <td class="border text-center select-none">
+                                <a href="{{ path('personal_page', {'slug': professional.slug}) }}" target='_blank' style="font-size:38px;">
+                                    ➡️
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+{% endblock %}

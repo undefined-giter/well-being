@@ -25,7 +25,7 @@ class PatientRepository extends ServiceEntityRepository
 
         $qb->select('p')
             ->andWhere('p.is_followed = 0')
-            ->orderBy('p.registration_date', 'DESC');
+            ->orderBy('p.registration_date');
 
         if ($interestFilter !== null) {
             // Utilisation d'une expression LIKE pour filtrer par intérêt

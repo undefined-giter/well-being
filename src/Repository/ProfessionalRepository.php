@@ -6,14 +6,6 @@ use App\Entity\Professional;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Professional>
- *
- * @method Professional|null find($id, $lockMode = null, $lockVersion = null)
- * @method Professional|null findOneBy(array $criteria, array $orderBy = null)
- * @method Professional[]    findAll()
- * @method Professional[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class ProfessionalRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -21,28 +13,38 @@ class ProfessionalRepository extends ServiceEntityRepository
         parent::__construct($registry, Professional::class);
     }
 
-    //    /**
-    //     * @return Professional[] Returns an array of Professional objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Retrieve a summary of registered professionals with optional interest filtering.
+     *
+     * @param string|null $interestFilter
+     * @return array
+     */
+    public function findProfessionalSummary(?string $interestFilter): array
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->select('p.first_name', 'p.last_name', 'p.specialization', 'p.slug', 'p.online_availability', 'p.location')
+            ->orderBy('p.registration_date','DESC');
 
-    //    public function findOneBySomeField($value): ?Professional
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($interestFilter !== null) {
+            $queryBuilder->andWhere('p.specialisation LIKE :interest')
+                ->setParameter('interest', '%' . $interestFilter . '%');
+        }
+
+        $query = $queryBuilder->getQuery();
+        $professionals = $query->getResult();
+
+        $summary = [];
+        foreach ($professionals as $professional) {
+            $summary[] = [
+                'first_name' => $professional['first_name'],
+                'last_name' => $professional['last_name'],
+                'specialization' => $professional['specialization'],
+                'slug' => $professional['slug'],
+                'online_availability' => $professional['online_availability'],
+                'location' => $professional['location'],
+            ];
+        }
+
+        return $summary;
+    }
 }

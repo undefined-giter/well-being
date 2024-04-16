@@ -26,7 +26,7 @@ class ProfessionalRepository extends ServiceEntityRepository
             ->orderBy('p.registration_date','DESC');
 
         if ($interestFilter !== null) {
-            $queryBuilder->andWhere('p.specialisation LIKE :interest')
+            $queryBuilder->andWhere('p.specialization LIKE :interest')
                 ->setParameter('interest', '%' . $interestFilter . '%');
         }
 

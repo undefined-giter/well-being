@@ -80,8 +80,8 @@ class ProfessionalRegisterController extends AbstractController
             }
 
             $specialization = $form->get('specialization')->getData();
-            $personal_specialisation = $form->get('other_specialization')->getData();
-            if (!empty($personal_specialisation)){$specialization[] = $personal_specialisation;}
+            $personal_specialization = $form->get('other_specialization')->getData();
+            if (!empty($personal_specialization)){$specialization[] = $personal_specialization;}
             $professional->setSpecialization($specialization);
 
             $location = $form->get('location')->getData();

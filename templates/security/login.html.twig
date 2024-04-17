@@ -16,7 +16,7 @@
     </div>
 {% endfor %}
 
-<form method="post" class="mx-3">
+<form method="post" class="mx-auto sm:w-[400px] w-full">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
@@ -43,9 +43,11 @@
         </label>
     </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
+    <div class='text-right mr-4'>
+        <button class='btn bg-indigo-600 hover:bg-indigo-700 text-slate-200 hover:text-slate-200' type="submit">
+            Sign in
+        </button>
+    </div>
 </form>
 {% endblock %}
 

@@ -28,7 +28,8 @@ function initMap() {
     const submitButton = document.createElement("input");
 
     submitButton.type = "button";
-    submitButton.value = "Find your place";
+    submitButton.value = "Your place";
+    submitButton.style = 'margin-left:0; padding:5px;';
     submitButton.classList.add("button", "button-primary");
 
     response = document.createElement("pre");
@@ -77,7 +78,7 @@ window.initMap = initMap;
 </script>
 <style>
     #map {height: 100%;}
-    input[type="text"] {
+    input[type="text"]:not(.usual, .usual *) {
     background-color: #fff;
     border: 0;
     border-radius: 2px;
@@ -119,7 +120,7 @@ window.initMap = initMap;
 {% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="container mb-4">
     <h1 class='text-center'>Professional Registration</h1>
 
     {% if form_errors(form) %}
@@ -127,33 +128,35 @@ window.initMap = initMap;
         {{ form_errors(form) }}
     </div>
     {% endif %}
-    <div class="row">
-        <div class="col-md-6 offset-md-3 relative">
-            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
-            {{ form_row(form.first_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'First Name'}}) }}
-            {{ form_row(form.last_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Last Name'}}) }}
-            {{ form_row(form.email, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Email'}}) }}
-            {{ form_row(form.picture, {'attr': {'class': 'form-control mb-3'}}) }}
-            {{ form_row(form.password, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Password'}}) }}
-            {{ form_row(form.description, {'attr': {'class': 'form-control mb-3', 'rows': '4', 'placeholder': 'Description'}}) }}
-            {{ form_row(form.specialization, {'label_attr': {'class': 'd-block'}, 'attr': {'class': 'form-control mb-3', 'style': 'height: 200px; display: inline-block; vertical-align: top;'}}) }}
+    <div class="relative mx-auto sm:w-[400px] w-full">
+        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+        {{ form_row(form.first_name, {'attr': {'class': 'form-control mb-3 usual', 'placeholder': 'First Name'}}) }}
+        {{ form_row(form.last_name, {'attr': {'class': 'form-control mb-3 usual', 'placeholder': 'Last Name'}}) }}
+        {{ form_row(form.email, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Email'}}) }}
+        {{ form_row(form.picture, {'attr': {'class': 'form-control mb-3'}}) }}
+        {{ form_row(form.description, {'attr': {'class': 'form-control mb-3', 'rows': '4', 'placeholder': 'Description'}}) }}
+        {{ form_row(form.specialization, {'label_attr': {'class': 'd-block'}, 'attr': {'class': 'form-control mb-3', 'style': 'height: 200px; display: inline-block; vertical-align: top;'}}) }}
+        <div class='-mt-4'>
             {{ form_row(form.other_specialization_checkbox) }}
-            {{ form_row(form.other_specialization) }}
-            {{ form_row(form.online_availability) }}
-            {{ form_row(form.location, {'id': 'location_input', 'attr': {'style': 'display: none;'}}) }}
-            <p id='address'>Enter or pick your location</p>
-            <div id="map" style='height:350px; border-radius:0.5em'></div>
-            <div class='absolute right-[10px]'>
-                {{ form_row(form.irl_availability) }}
-            </div>
-            <div class='mb-6'></div>
-            {{ form_row(form.video, {'attr': {'class': 'w-full'}})  }}
-            {{ form_row(form._token) }}
-            <div class='text-right mr-4'>
-                {{ form_row(form.save, {'attr': {'class': 'btn bg-indigo-600 hover:bg-indigo-700 text-slate-200 hover:text-slate-200'}}) }}
-            </div>
-            {{ form_end(form) }}
         </div>
+        <div class='usual'>
+            {{ form_row(form.other_specialization) }}
+        </div>
+        {{ form_row(form.online_availability) }}
+        {{ form_row(form.location, {'id': 'location_input', 'attr': {'style': 'display: none;'}}) }}
+        <p id='address'>Enter or pick your location</p>
+        <div id="map" style='height:350px; border-radius:0.5em'></div>
+        <div class='absolute right-[10px]'>
+            {{ form_row(form.irl_availability) }}
+        </div>
+        <div class='mb-6'></div>
+        {{ form_row(form.video, {'attr': {'class': 'w-full border rounded mb-2 p-2 usual', 'placeholder': 'Your Presentation - Full-Link'}})  }}
+        {{ form_row(form._token) }}
+        {{ form_row(form.password, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Password'}}) }}
+        <div class='text-right mr-4'>
+            {{ form_row(form.save, {'attr': {'class': 'btn bg-indigo-600 hover:bg-indigo-700 text-slate-200 hover:text-slate-200'}}) }}
+        </div>
+        {{ form_end(form) }}
     </div>
 </div>
 

@@ -31,9 +31,7 @@ class UpdatePatientType extends UpdateBaseUserType
                 'label' => 'Delete current profile picture',
                 'mapped' => false,
             ])
-            ->add('is_followed', CheckboxType::class, [
-                'label' => 'Are you under professional care in here?',
-            ])
+            ->add('is_followed', CheckboxType::class)
             ->add('save', SubmitType::class, [
                 'label' => 'Modify Profile',
                 'attr' => ['class' => 'btn btn-primary align-right'],

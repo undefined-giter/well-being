@@ -7,7 +7,7 @@
 {% block title %}Update Your Profile{% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="container mb-4">
         {% for flash_message in app.session.flashbag.get('danger') %}
             <div class="alert alert-danger mx-6">
                 {{ flash_message }}
@@ -19,8 +19,6 @@
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
-
-
 
                 {{ form_row(form.first_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'First Name'}}) }}
                 {{ form_row(form.last_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Last Name'}}) }}
@@ -46,7 +44,7 @@
                     'attr': {'class': 'custom-checkbox'}
                 }) }}
                 {{ form_row(form.is_followed, {
-                    'label': 'Are you under professional care in here? ',
+                    'label': 'Are you under professional care? ',
                     'label_attr': {'class': 'checkbox-label'},
                     'widget_type': 'inline',
                     'attr': {'class': 'custom-checkbox mt-3'}
@@ -58,10 +56,15 @@
                 {{ form_row(form.hidden_original_picture, {'attr': {'style': 'display:none;', 'value': profilePicture } }) }}
                 {{ form_row(form.hidden_original_interests, {'attr': {'style': 'display:none;', 'value': originalInterests } }) }}
                 {# {{ form_row(form.password, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Password'}}) }} #}
-                {{originalInterests}}
                 {{ form_row(form._token) }}
 
                 {{ form_end(form) }}
+
+                <a href="{{ path('update_password') }}" class="block ml-4">
+                    <button class='btn bg-indigo-600 hover:bg-indigo-700 text-slate-200 hover:text-slate-200'>
+                        Change Password
+                    </button>
+                </a>
             </div>
         </div>
     </div>

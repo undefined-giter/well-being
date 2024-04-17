@@ -76,7 +76,7 @@ class ProfessionalType extends BaseUserType
                 'label_html' => true,
                 'attr' => [
                     'class' => 'other-specialization-checkbox',
-                    'style' => 'transform: scale(0.8);'
+                    'style' => 'transform: scale(0.8);',
                 ],
             ])
             ->add('other_specialization', TextType::class, [
@@ -84,7 +84,7 @@ class ProfessionalType extends BaseUserType
                 'required' => false,
                 'mapped' => false,
                 'attr' => [
-                    'class' => 'other-specialization-field w-full',
+                    'class' => 'other-specialization-field w-full border rounded mb-2 p-2',
                     'style' => 'display: none;',
                     'placeholder' => 'Enter your specialization',
                 ],
@@ -108,7 +108,7 @@ class ProfessionalType extends BaseUserType
                 ],
             ])
             ->add('video', TextType::class, [
-            'label' => "Youtube video link <small>-><span title='Paste type \"https://www.youtube.com/watch?v=...\"' style='cursor:pointer'>❔</span></small>",
+            'label' => "Youtube Video Link <small>-><span title='Paste type \"https://www.youtube.com/watch?v=...\"' style='cursor:pointer'>❔</span></small>",
             'label_html' => true,
             ])
         ;

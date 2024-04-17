@@ -3,6 +3,10 @@
 {% block title %}Update Password{% endblock %}
 
 {% block body %}
+<style>
+li{color:red;}
+</style>
+
     <div class="text-center">
         <h1 class="mb-12">Update Your Password</h1>
 
@@ -11,18 +15,19 @@
 
             {{ form_row(form.password.first, {
                 'label': 'Enter your new password',
-                'attr': { 'class': 'block w-full sm:w-2/5 md:w-[300px] text-center mx-auto mt-2 p-2' }
+                'attr': { 'class': 'block w-full sm:w-2/5 md:w-[300px] text-center mx-auto mt-2 mb-3 p-2' }
             }) }}
-            <p class='text-orange-600 text-xs mb-4'>Won't change if let empty.</p>
 
             {{ form_row(form.password.second, {
                 'label': 'Confirm your new password',
-                'attr': { 'class': 'block w-full sm:w-2/5 md:w-[300px] text-center mx-auto mt-2 mb-1 p-2' }
+                'attr': { 'class': 'block w-full sm:w-2/5 md:w-[300px] text-center mx-auto mt-2 mb-4 p-2' }
             }) }}
 
-            <button type="submit" class='btn bg-indigo-600 hover:bg-indigo-700 text-slate-200 hover:text-slate-200'>
-                Update Password
-            </button>
+            <div class="flex justify-end">
+                <button type="submit" class='btn bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100' style='margin-right:70px'>
+                    Update Password
+                </button>
+            </div>
 
             {{ form_end(form) }}
         </div>

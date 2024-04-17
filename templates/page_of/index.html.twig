@@ -8,7 +8,7 @@
         {% if pu.picture %}
             <img src="{{ asset('profilesPictures/' ~ pu.picture) }}" alt="Your Profile Picture" style="height: 150px; border-radius: 50%;" class='mx-auto'>
         {% endif %}
-        <h1>Welcome to {{ pu.firstName }} {{ pu.lastName }}'s page</h1>
+        <h1 class='text-center'>Welcome to {{ pu.firstName }} {{ pu.lastName }}'s page</h1>
         <div class='personal_bg'>
             <p>Description:<br>{{ pu.description }}</p>
             <p>Is a {% for role in pu.roles|slice(1) %}* {{ role }}{% endfor %}</p>

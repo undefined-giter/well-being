@@ -14,58 +14,56 @@
             </div>
         {% endfor %}
 
-        <h1 class='text-center'>Update Your Patient Profile</h1>
+        <h1 class='text-center mb-3'>Update Your Patient Profile</h1>
 
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+        <div class="mx-auto sm:w-[400px] w-full">
+            {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
 
-                {{ form_row(form.first_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'First Name'}}) }}
-                {{ form_row(form.last_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Last Name'}}) }}
-                {{ form_row(form.email, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Email'}}) }}
-                {% if profilePicture %}
-                <div class='flex'>
-                    Your current profile picture: <img src="{{ asset('profilesPictures/' ~ profilePicture) }}" alt="Current Profile Picture" style="height: 50px; border-radius: 50%; margin: 0 0 -26px 42px;">
-                </div>
-                {{ form_row(form.delete_picture, {
-                    'label': 'Check to delete your profile picture ',
-                    'label_attr': {'class': 'checkbox-label text-sm'},
-                    'widget_type': 'inline',
-                    'attr': {'class': 'custom-checkbox'}
-                }) }}
-                {% endif %}
-                {{ form_row(form.picture, {'attr': {'class': 'form-control mb-3'}}) }}
-                {{ form_row(form.description, {'attr': {'class': 'form-control mb-3', 'rows': '4', 'placeholder': 'Description'}}) }}
-                {{ form_row(form.interestedIn, {'label_attr': {'class': 'd-block'}, 'attr': {'class': 'form-control', 'style': 'height: 200px; display: inline-block; vertical-align: top;'}}) }}
-                {{ form_row(form.delete_interestedIn, {
-                    'label': 'Check to delete your domains of interest ',
-                    'label_attr': {'class': 'checkbox-label text-sm'},
-                    'widget_type': 'inline',
-                    'attr': {'class': 'custom-checkbox'}
-                }) }}
-                {{ form_row(form.is_followed, {
-                    'label': 'Are you under professional care? ',
-                    'label_attr': {'class': 'checkbox-label'},
-                    'widget_type': 'inline',
-                    'attr': {'class': 'custom-checkbox mt-3'}
-                }) }}
-                <p class='text-orange-600 text-sm mb-3'>
-                    Check only if you no longer wish to appear in the available patient list
-                    <br><small>(Only professionals can see the list)</small>
-                </p>
-                {{ form_row(form.hidden_original_picture, {'attr': {'style': 'display:none;', 'value': profilePicture } }) }}
-                {{ form_row(form.hidden_original_interests, {'attr': {'style': 'display:none;', 'value': originalInterests } }) }}
-                {# {{ form_row(form.password, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Password'}}) }} #}
-                {{ form_row(form._token) }}
-
-                {{ form_end(form) }}
-
-                <a href="{{ path('update_password') }}" class="block ml-4">
-                    <button class='btn bg-indigo-600 hover:bg-indigo-700 text-slate-200 hover:text-slate-200'>
-                        Change Password
-                    </button>
-                </a>
+            {{ form_row(form.first_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'First Name'}}) }}
+            {{ form_row(form.last_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Last Name'}}) }}
+            {{ form_row(form.email, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Email'}}) }}
+            {% if profilePicture %}
+            <div class='flex'>
+                Your current profile picture: <img src="{{ asset('profilesPictures/' ~ profilePicture) }}" alt="Current Profile Picture" style="height: 50px; border-radius: 50%; margin: 0 0 -26px 48px;">
             </div>
+            {{ form_row(form.delete_picture, {
+                'label': 'Check to delete your profile picture ',
+                'label_attr': {'class': 'checkbox-label text-sm'},
+                'widget_type': 'inline',
+                'attr': {'class': 'custom-checkbox'}
+            }) }}
+            {% endif %}
+            {{ form_row(form.picture, {'attr': {'class': 'form-control mb-3'}}) }}
+            {{ form_row(form.description, {'attr': {'class': 'form-control mb-3', 'rows': '4', 'placeholder': 'Description'}}) }}
+            {{ form_row(form.interestedIn, {'label_attr': {'class': 'd-block'}, 'attr': {'class': 'form-control', 'style': 'height: 200px; display: inline-block; vertical-align: top;'}}) }}
+            {{ form_row(form.delete_interestedIn, {
+                'label': 'Check to delete your domains of interest ',
+                'label_attr': {'class': 'checkbox-label text-sm'},
+                'widget_type': 'inline',
+                'attr': {'class': 'custom-checkbox'}
+            }) }}
+            {{ form_row(form.is_followed, {
+                'label': 'Are you under professional care? ',
+                'label_attr': {'class': 'checkbox-label mt-4'},
+                'widget_type': 'inline',
+                'attr': {'class': 'custom-checkbox'}
+            }) }}
+            <p class='text-orange-600 text-sm mb-6'>
+                Check only if you no longer wish to appear in the patient list
+                <br><small>(Only professionals can see the list)</small>
+            </p>
+            {{ form_row(form.hidden_original_picture, {'attr': {'style': 'display:none;', 'value': profilePicture } }) }}
+            {{ form_row(form.hidden_original_interests, {'attr': {'style': 'display:none;', 'value': originalInterests } }) }}
+            {# {{ form_row(form.password, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Password'}}) }} #}
+            {{ form_row(form._token) }}
+
+            {{ form_end(form) }}
+
+            <a href="{{ path('update_password') }}" class="block ml-4">
+                <button class='btn bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100'>
+                    Change Password
+                </button>
+            </a>
         </div>
     </div>
 {% endblock %}

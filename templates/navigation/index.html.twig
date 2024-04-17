@@ -8,40 +8,8 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 0.5rem;
 }
-
 .register-link:hover .register-dropdown {
     display: block;
-}
-input[type="file"] {
-    /* Utilisez opacity: 0 pour cacher le bouton de sélection de fichier, mais toujours le rendre cliquable */
-    opacity: 0;
-    position: absolute;
-    z-index: -1;
-}
-.custom-file-upload {
-    display: inline-block;
-    padding: 8px 12px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    color: #333;
-    border-radius: 4px;
-}
-
-/* Styliser le texte "Choose File" à l'intérieur du conteneur */
-.custom-file-upload::before {
-    content: 'Choose File';
-    display: inline-block;
-    padding: 4px 8px;
-    border-right: 1px solid #ccc;
-    margin-right: 8px;
-    font-weight: bold;
-}
-
-/* Styliser le texte du bouton de sélection de fichier lorsqu'un fichier est sélectionné */
-.custom-file-upload input[type="file"]:valid + ::before {
-    content: attr(data-file-name); /* Afficher le nom du fichier sélectionné */
-    color: #007bff; /* Couleur du texte lorsque le fichier est sélectionné */
 }
 </style>
 

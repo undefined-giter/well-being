@@ -10,14 +10,14 @@
             <p>No patient registered for your rechearch, please seek for another speciality<p>
             <form id="filterForm" class="flex" method="get" action="{{ path('list_patient') }}">
                 <input type="text" name="interestFilter" placeholder="Filter by Interest">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white rounded-r">Filter</button>
+                <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100 rounded-r">Filter</button>
             </form>
             <button><a href="{{ path('list_patient') }}">Reset</a></button>
         </div>
     {% else %}
         <div class='mx-4'>
             <table class='mx-auto text-center'>
-                <thead class="bg-gray-800 text-white">
+                <thead class="bg-blue-800 text-slate-200">
                     <tr class='cursor-default'>
                         <th>First Name</th>
                         <th>Last Name</th>
@@ -27,7 +27,7 @@
                             <span class="mx-auto">Interests</span>
                             <form id="filterForm" class="flex" method="get" action="{{ path('list_patient') }}">
                                 <input type="text" name="interestFilter" placeholder="Filter by Interest">
-                                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white mr-4 px-2 rounded-r">Filter</button>
+                                <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100 mr-4 px-2 rounded-r">Filter</button>
                             </form>
                             <button><a href="{{ path('list_patient') }}" class='px-2 text-orange-600'>Reset</a></button>
                         </th>

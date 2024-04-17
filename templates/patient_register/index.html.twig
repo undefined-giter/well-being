@@ -3,7 +3,6 @@
 {% block title %}Hello PatientRegisterController!{% endblock %}
 
 {% block body %}
-
 <div class="container mb-4">
     <h1 class='text-center mb-4'>Patient Registration</h1>
 
@@ -22,7 +21,7 @@
         {{ form_row(form._token) }}
         {{ form_row(form.password, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Password'}}) }}
         <div style="text-align: right; margin-right: 16px">
-            {{ form_row(form.save, {'attr': {'class': 'btn bg-blue-500 hover:bg-blue-600 text-slate-200 hover:text-slate-200'}}) }}
+            {{ form_row(form.save, {'attr': {'class': 'btn bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100'}}) }}
         </div>
         {{ form_end(form) }}
     </div>

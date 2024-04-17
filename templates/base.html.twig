@@ -14,14 +14,16 @@
         html, body {
             margin: 0;
             padding: 0;
-            min-height: 100%;
-            min-width: 100%;
         }
         body {
             background: linear-gradient(to top, #3E2723, #008000);
-            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            min-height: 100%;
+            min-width: 100%;
         }
         *::placeholder{color:gray;}
+        input{border-radius: 1em;}
         input, textarea, select, table{
             background: #26FFD7 !important;
             color: #333;
@@ -32,18 +34,31 @@
             color: #666;
         }
         input[type="checkbox"] {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 14px;
-            height: 14px;
+            width: 20px;
+            height: 20px;
             border: 1px solid #ccc;
             border-radius: 3px;
-            outline: none;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+        input[type="checkbox"]:not(:checked) {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
             cursor: pointer;
             vertical-align: middle;
         }
         input[type="checkbox"]:checked {
             background-color: #29F700 !important;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            cursor: pointer;
+            vertical-align: middle;
         }
         .personal_bg{
             background: #3E2723 !important;

@@ -10,7 +10,48 @@
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
-        <style>{% block stylesheet %}{% endblock %}</style>
+        <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            min-width: 100%;
+        }
+        body {
+            background: linear-gradient(to top, #3E2723, #008000);
+            background-repeat: no-repeat;
+        }
+        *::placeholder{color:gray;}
+        input, textarea, select, table{
+            background: #26FFD7 !important;
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+        input::placeholder, textarea::placeholder, select::placeholder {
+            color: #666;
+        }
+        input[type="checkbox"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+        input[type="checkbox"]:checked {
+            background-color: #29F700 !important;
+        }
+        .personal_bg{
+            background: #3E2723 !important;
+            border-radius: 2em;
+            padding:2em;
+        }
+        {% block stylesheet %}{% endblock %}
+        </style>
         {% block map_head %}{% endblock %}
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}

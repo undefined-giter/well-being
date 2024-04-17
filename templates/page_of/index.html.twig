@@ -4,38 +4,40 @@
 
 
 {% block body %}
-    <div>
+    <div class='sm:w-1/4 w-full mx-auto'>
         {% if pu.picture %}
             <img src="{{ asset('profilesPictures/' ~ pu.picture) }}" alt="Your Profile Picture" style="height: 150px; border-radius: 50%;" class='mx-auto'>
         {% endif %}
         <h1>Welcome to {{ pu.firstName }} {{ pu.lastName }}'s page</h1>
-        <p>Description:<br>{{ pu.description }}</p>
-        <p>Is a {% for role in pu.roles|slice(1) %}* {{ role }}{% endfor %}</p>
-        <p>And member of <span class='text-green-600'>Well-Being<span> since: {{ pu.registrationDate|date('F Y') }}</p>
+        <div class='personal_bg'>
+            <p>Description:<br>{{ pu.description }}</p>
+            <p>Is a {% for role in pu.roles|slice(1) %}* {{ role }}{% endfor %}</p>
+            <p>And member of <span class='text-green-600'>Well-Being<span> since: {{ pu.registrationDate|date('F Y') }}</p>
 
-        {% if 'patient' in pu.roles and pu.interestedIn is not empty %}
-            <p><span class='text-green-700 text-sm'>His domains of interests :<br>
-                {% for interest in pu.interestedIn %}
-                    <span class='text-green-700 text-sm'>                         *</span></span> {{ interest }}<br>
-                {% endfor %}
-            </p>
-        {% endif %}
-
-        {% if 'professional' in pu.roles %}
-            <p>Is specialized in :{% for spe in pu.specialization %}<br>        * {{ spe }}{% endfor %}</p>
-            {% if pu.onlineAvailability %}<p>Can be reach online for your session!</p>{% endif %}
-            {% if pu.location %}
-                <p>{{ address }}</p>
-                <p>{{ latitude }}</p>
-                <p>{{ longitude }}</p>
+            {% if 'patient' in pu.roles and pu.interestedIn is not empty %}
+                <p><span class='text-green-700 text-sm'>His domains of interests :<br>
+                    {% for interest in pu.interestedIn %}
+                        <span class='text-green-700 text-sm'>                         *</span></span> {{ interest }}<br>
+                    {% endfor %}
+                </p>
             {% endif %}
-            {% if pu.video %}
-                {% set videoId = pu.video|split('/')|last %}
 
-                {% set embedUrl = 'https://www.youtube.com/embed/' ~ videoId %}
+            {% if 'professional' in pu.roles %}
+                <p>Is specialized in :{% for spe in pu.specialization %}<br>        * {{ spe }}{% endfor %}</p>
+                {% if pu.onlineAvailability %}<p>Can be reach online for your session!</p>{% endif %}
+                {% if pu.location %}
+                    <p>{{ address }}</p>
+                    <p>{{ latitude }}</p>
+                    <p>{{ longitude }}</p>
+                {% endif %}
+                {% if pu.video %}
+                    {% set videoId = pu.video|split('/')|last %}
 
-                <iframe width="560" height="315" src="{{ embedUrl }}" frameborder="0" allowfullscreen></iframe>
+                    {% set embedUrl = 'https://www.youtube.com/embed/' ~ videoId %}
+
+                    <iframe width="560" height="315" src="{{ embedUrl }}" frameborder="0" allowfullscreen></iframe>
+                {% endif %}
             {% endif %}
-        {% endif %}
+        </div>
     </div>
 {% endblock %}

@@ -64,7 +64,7 @@ class PatientType extends BaseUserType
                 'Stress Management Therapist' => 'Stress Management Therapist',
             ],
             'label' => "Yours interests <small>-> <span style='color:orange'>Maintain 
-                        <b style='color:green'>Ctrl</b> to select multiple</span></small>",
+                        <b style='color:lightgreen'>Ctrl</b> to select multiple</span></small>",
             'required' => true,
             'multiple' => true,
             'label_html' => true,

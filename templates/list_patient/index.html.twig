@@ -10,7 +10,7 @@
             <p>No patient registered for your rechearch, please seek for another speciality<p>
             <form id="filterForm" class="flex" method="get" action="{{ path('list_patient') }}">
                 <input type="text" name="interestFilter" placeholder="Filter by Interest">
-                <button type="submit" class="bg-blue-500 text-white rounded-r">Filter</button>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white rounded-r">Filter</button>
             </form>
             <button><a href="{{ path('list_patient') }}">Reset</a></button>
         </div>
@@ -27,7 +27,7 @@
                             <span class="mx-auto">Interests</span>
                             <form id="filterForm" class="flex" method="get" action="{{ path('list_patient') }}">
                                 <input type="text" name="interestFilter" placeholder="Filter by Interest">
-                                <button type="submit" class="bg-blue-500 text-white mr-4 px-2 rounded-r">Filter</button>
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white mr-4 px-2 rounded-r">Filter</button>
                             </form>
                             <button><a href="{{ path('list_patient') }}" class='px-2 text-orange-600'>Reset</a></button>
                         </th>

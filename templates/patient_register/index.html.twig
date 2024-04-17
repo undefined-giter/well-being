@@ -5,10 +5,14 @@
 {% block body %}
 
 <div class="container mb-4">
-    <h1 class='text-center'>Patient Registration</h1>
+    <h1 class='text-center mb-4'>Patient Registration</h1>
 
-    <div class="mx-auto sm:w-[400px] w-full">
-        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+    {% if form_errors(form) %}
+        <div class="alert alert-danger">{{ form_errors(form) }}</div>
+    {% endif %}
+
+    <div class="relative mx-auto sm:w-[400px] w-full">
+        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'class' : 'w-[400px] mx-auto'}}) }}
         {{ form_row(form.first_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'First Name'}}) }}
         {{ form_row(form.last_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Last Name'}}) }}
         {{ form_row(form.email, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Email'}}) }}
@@ -18,10 +22,9 @@
         {{ form_row(form._token) }}
         {{ form_row(form.password, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Password'}}) }}
         <div style="text-align: right; margin-right: 16px">
-            {{ form_row(form.save, {'attr': {'class': 'btn bg-indigo-600 hover:bg-indigo-700 text-slate-200 hover:text-slate-200'}}) }}
+            {{ form_row(form.save, {'attr': {'class': 'btn bg-blue-500 hover:bg-blue-600 text-slate-200 hover:text-slate-200'}}) }}
         </div>
         {{ form_end(form) }}
     </div>
 </div>
-
 {% endblock %}

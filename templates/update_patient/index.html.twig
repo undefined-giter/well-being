@@ -1,9 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheet %}
-.align-right {float: right; margin-right: 15px;}
-{% endblock %}
-
 {% block title %}Update Your Profile{% endblock %}
 
 {% block body %}
@@ -14,7 +10,7 @@
             </div>
         {% endfor %}
 
-        <h1 class='text-center mb-3'>Update Your Patient Profile</h1>
+        <h1 class='h3 mb-3 font-weight-normal text-center'>Update Your Patient Profile</h1>
 
         <div class="mx-auto sm:w-[400px] w-full">
             {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
@@ -23,15 +19,15 @@
             {{ form_row(form.last_name, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Last Name'}}) }}
             {{ form_row(form.email, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Email'}}) }}
             {% if profilePicture %}
-            <div class='flex'>
-                Your current profile picture: <img src="{{ asset('profilesPictures/' ~ profilePicture) }}" alt="Current Profile Picture" style="height: 50px; border-radius: 50%; margin: 0 0 -26px 48px;">
-            </div>
-            {{ form_row(form.delete_picture, {
-                'label': 'Check to delete your profile picture ',
-                'label_attr': {'class': 'checkbox-label text-sm'},
-                'widget_type': 'inline',
-                'attr': {'class': 'custom-checkbox'}
-            }) }}
+                <div class='flex'>
+                    Your current profile picture: <img src="{{ asset('profilesPictures/' ~ profilePicture) }}" alt="Current Profile Picture" style="height: 50px; border-radius: 50%; margin: 0 0 -26px 48px;">
+                </div>
+                {{ form_row(form.delete_picture, {
+                    'label': 'Check to delete your profile picture ',
+                    'label_attr': {'class': 'checkbox-label text-sm'},
+                    'widget_type': 'inline',
+                    'attr': {'class': 'custom-checkbox'}
+                }) }}
             {% endif %}
             {{ form_row(form.picture, {'attr': {'class': 'form-control mb-3'}}) }}
             {{ form_row(form.description, {'attr': {'class': 'form-control mb-3', 'rows': '4', 'placeholder': 'Description'}}) }}
@@ -55,15 +51,24 @@
             {{ form_row(form.hidden_original_picture, {'attr': {'style': 'display:none;', 'value': profilePicture } }) }}
             {{ form_row(form.hidden_original_interests, {'attr': {'style': 'display:none;', 'value': originalInterests } }) }}
             {# {{ form_row(form.password, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Password'}}) }} #}
+
+            <div class="flex justify-between mb-4 mx-6">
+                <a href="{{ path('update_password') }}">
+                    <button type="button" class="btn bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100">
+                        Change Password
+                    </button>
+                </a>
+                {{ form_row(form.save, {
+                    'label': 'Modify Profile',
+                    'attr': {
+                        'class': 'btn bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100'
+                    }
+                }) }}
+            </div>
+
             {{ form_row(form._token) }}
 
             {{ form_end(form) }}
-
-            <a href="{{ path('update_password') }}" class="block ml-4">
-                <button class='btn bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100'>
-                    Change Password
-                </button>
-            </a>
         </div>
     </div>
 {% endblock %}

@@ -2,42 +2,30 @@
 
 {% block title %}Professionals List{% endblock %}
 
-{% block stylesheet %}
-.overflowSpe{
-    max-height: 72px !important;
-    overflow-y: auto !important;
-}
-.location{
-    width: 280px !important;
-    max-height: 72px !important;
-    overflow: auto !important;
-}
-{% endblock %}
-
 {% block body %}
-    <h1 class="text-center mt-2 mb-4">Find Your Perfect Master</h1>
+    <h1 class="h3 mb-3 font-weight-normal text-center">Find Your Perfect Master</h1>
 
     {% if professionalSummary is empty %}
         <div class="mx-auto text-center">
             <p>No professionals registered for the specified criteria.</p>
             <form class="flex items-center justify-center mt-4" method="get" action="{{ path('list_professional') }}">
                 <input type="text" name="interestFilter" placeholder="Filter by Specialization" class="border border-gray-400 rounded-l px-4 py-2 focus:outline-none focus:border-blue-500">
-                <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100 rounded-r px-4 py-2 ml-2">Filter</button>
+                <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100 rounded-r px-4 py-2 ml-2" style='border-radius: 0 0.5em 0.5em 0;'>Filter</button>
             </form>
             <a href="{{ path('list_professional') }}" class="block mt-2 text-blue-500">Reset Filter</a>
         </div>
     {% else %}
         <table class="text-center table-auto mx-auto cursor-default mb-6">
             <thead>
-                <tr class="bg-gray-800 text-white">
+                <tr class="bg-blue-800 text-slate-200">
                     <th class="px-4 py-2">First Name</th>
                     <th class="px-4 py-2">Last Name</th>
                     <th class="flex items-center justify-end px-4 py-2">Specializations 
                         <form class="flex items-center justify-center" method="get" action="{{ path('list_professional') }}">
-                            <input type="text" name="specializationFilter" placeholder="Filter" title='Filter by Specialization' style="width: 84px;" class="border border-gray-400 rounded-l p-1 focus:outline-none focus:border-blue-500 text-sm">
-                            <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100 rounded-r p-1 text-sm">Filter</button>
+                            <input type="text" name="specializationFilter" placeholder="Filter" title='Filter by Specialization' style="width: 84px; height: 28px; border-radius:0.5em 0 0 0.5em;" class="border border-gray-400 rounded-l p-1 focus:outline-none focus:border-blue-500 text-sm">
+                            <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100 rounded-r p-1 text-sm" style='border-radius: 0 0.5em 0.5em 0;'>Filter</button>
                         </form>
-                        <button><a href="{{ path('list_professional') }}" class='p-1 ml-2 text-orange-600 text-sm'>Reset</a></button>
+                        <button><a href="{{ path('list_professional') }}" class='p-1 ml-2 text-orange-400 hover:text-orange-500'>Reset</a></button>
                     </th>
                     <th class="px-4 py-2">Location</th>
                     <th class="px-4 py-2">Online</th>
@@ -53,23 +41,24 @@
                             {% if professional.specialization is empty %}
                                 <p>No specializations registered yet, which is not supposed to be</p>
                             {% else %}
-                                <ul class="list-disc list-inside text-left overflow-hidden overflowSpe">
+                                <ul class="list-disc list-inside text-left max-h-[72px] overflow-y-auto">
                                     {% for specialization in professional.specialization %}
                                         <li>{{ specialization }}</li>
                                     {% endfor %}
                                 </ul>
                             {% endif %}
                         </td>
-                        <td class="border px-4 py-2 location">
+                        <td class="border p-2 w-[280px] max-h-[72px] overflow-y-auto">
                             {% if professional.location == null %}
                                 <p>Available Online</p>
                             {% else %}
                                 {% set parts = professional.location|split(',') %}
-                                {% set location = parts|slice(-2, 1)|first|replace({'"': '', ':': '', 'value': ''}) %}
-                                <p>{{ location }}</p>
+                                {% set locationLine = parts|slice(-2, 1)|first|replace({'"': '', ':': '', 'value': ''})|trim %}
+                                {% set location = locationLine|replace({' ': '<br>'}, 1) %}
+                                <p>{{ location|raw }}</p>
                             {% endif %}
                         </td>
-                        <td class="border px-4 py-2 cursor-default select-none" style="font-size:40px;">{{ professional.online_availability ? '🟢' : '🔴' }}</td>
+                        <td class="border px-4 cursor-default select-none" style="font-size:40px;">{{ professional.online_availability ? '🟢' : '🔴' }}</td>
                         <td class="border text-center select-none">
                             <a href="{{ path('personal_page', {'slug': professional.slug}) }}" target='_blank' style="font-size:40px;">
                                 ➡️

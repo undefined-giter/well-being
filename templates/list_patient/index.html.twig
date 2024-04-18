@@ -3,33 +3,33 @@
 {% block title %}Patients List{% endblock %}
 
 {% block body %}
-    <h1 class="text-center mt-2 mb-4">Free Patients List</h1>
+    <h1 class="h3 mb-3 font-weight-normal text-center">Free Patients List</h1>
 
     {% if freePatientsSummary is empty %}
         <div class='mx-auto'>
             <p>No patient registered for your rechearch, please seek for another speciality<p>
             <form id="filterForm" class="flex" method="get" action="{{ path('list_patient') }}">
-                <input type="text" name="interestFilter" placeholder="Filter by Interest">
-                <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100 rounded-r">Filter</button>
+                <input type="text" name="interestFilter" placeholder="Filter by Interest" class='rounded-r-none' style="width: 84px; height: 28px; border-radius:0.5em 0 0 0.5em;">
+                <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100" style='border-radius: 0 0.5em 0.5em 0;'>Filter</button>
             </form>
             <button><a href="{{ path('list_patient') }}">Reset</a></button>
         </div>
     {% else %}
         <div class='mx-4'>
-            <table class='mx-auto text-center'>
+            <table class='mx-auto text-center cursor-default'>
                 <thead class="bg-blue-800 text-slate-200">
                     <tr class='cursor-default'>
                         <th>First Name</th>
                         <th>Last Name</th>
-                        <th class="flex items-center justify-end">
-                            <span class="ml-12">                             </span>
-                            <span class="mx-auto"> </span>
-                            <span class="mx-auto">Interests</span>
-                            <form id="filterForm" class="flex" method="get" action="{{ path('list_patient') }}">
-                                <input type="text" name="interestFilter" placeholder="Filter by Interest">
-                                <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100 mr-4 px-2 rounded-r">Filter</button>
-                            </form>
-                            <button><a href="{{ path('list_patient') }}" class='px-2 text-orange-600'>Reset</a></button>
+                        <th class="flex items-center">
+                            <div class='flex items-center justify-end px-4 py-2'>
+                                Interests 
+                                <form id="filterForm" class="flex" method="get" action="{{ path('list_patient') }}">
+                                    <input type="text" name="interestFilter" placeholder="Filter by Interest" class='rounded-r-none w-[142px]' style="width: 84px; height: 28px; border-radius:0.5em 0 0 0.5em;">
+                                    <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100 rounded-r px-1" style='border-radius: 0 0.5em 0.5em 0;'>Filter</button>
+                                </form>
+                                <button><a href="{{ path('list_patient') }}" class='p-1 ml-2 text-orange-400 hover:text-orange-500'>Reset</a></button>
+                            </div>
                         </th>
                         <th>Page</th>
                     </tr>
@@ -51,11 +51,11 @@
                                 {% if patient.interestedIn is empty %}
                                     No interest registered yet.
                                 {% else %}
-                                    <div style="white-space: nowrap; overflow: auto;">
+                                    <ul class="list-disc list-inside text-left max-h-[72px] overflow-y-auto">
                                         {% for interest in patient.interestedIn %}
-                                            {{ interest }}{% if not loop.last %}, {% endif %}
+                                            <li>{{ interest }}</li>
                                         {% endfor %}
-                                    </div>
+                                    </ul>
                                 {% endif %}
                             </td>
                             <td class="border text-center">

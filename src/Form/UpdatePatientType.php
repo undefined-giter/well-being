@@ -34,7 +34,7 @@ class UpdatePatientType extends UpdateBaseUserType
             ->add('is_followed', CheckboxType::class)
             ->add('save', SubmitType::class, [
                 'label' => 'Modify Profile',
-                'attr' => ['class' => 'btn btn-primary align-right'],
+                'attr' => ['class' => 'align-right btn bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100'],
             ])
             ->add('hidden_original_picture', HiddenType::class, [
                 'mapped' => false,

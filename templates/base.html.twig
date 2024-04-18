@@ -22,8 +22,17 @@
             min-height: 100%;
             min-width: 100%;
         }
+        body.dark-mode {
+            color: #ddd;
+            background-color: #222;
+        }
+        body.dark-mode table, body.dark-mode tr, body.dark-mode input::placeholder, 
+        body.dark-mode textarea::placeholder, body.dark-mode select::placeholder, body.dark-mode textarea::placeholder, 
+        body.dark-mode textarea, body.dark-mode select, body.dark-mode input{color: #ddd !important; background: #222 !important;}
+        body.dark-mode .personal_bg p{color: #ddd !important;}
+        body.dark-mode i, body.dark-mode h1{color: #ddd;}
         *::placeholder{color:gray;}
-        input{border-radius: 1em;}
+        input{border-radius: 0.5em;}
         input, textarea, select, table{
             background: #26FFD7 !important;
             color: #333;

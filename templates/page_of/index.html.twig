@@ -4,40 +4,50 @@
 
 
 {% block body %}
-    <div class='sm:w-1/4 w-full mx-auto'>
+<style>
+p{margin-bottom:8px;}
+</style>
+<div class="flex justify-center mb-4 mx-auto">
+    <div class="sm:w-1/2 md:w-[420px] text-orange-700">
         {% if pu.picture %}
-            <img src="{{ asset('profilesPictures/' ~ pu.picture) }}" alt="Your Profile Picture" style="height: 150px; border-radius: 50%;" class='mx-auto'>
+            <img src="{{ asset('profilesPictures/' ~ pu.picture) }}" alt="                    Your Profile Picture" style="height: 150px; border-radius: 50%;" class='mx-auto'>
         {% endif %}
-        <h1 class='text-center'>Welcome to {{ pu.firstName }} {{ pu.lastName }}'s page</h1>
+        <h1 class='h3 mb-3 font-weight-normal text-center'>{{ pu.firstName }} {{ pu.lastName }}'s page</h1>
         <div class='personal_bg'>
-            <p>Description:<br>{{ pu.description }}</p>
-            <p>Is a {% for role in pu.roles|slice(1) %}* {{ role }}{% endfor %}</p>
-            <p>And member of <span class='text-green-600'>Well-Being<span> since: {{ pu.registrationDate|date('F Y') }}</p>
+            <p><span class='text-green-700 text-sm'>Description:</span><br>      {{ pu.description }}</p>
+            <p><span class='text-green-700 text-sm'>He is a:             </span>{% for role in pu.roles|slice(1) %}
+            <span class='text-green-700 text-sm'>{% if 'professional' in pu.roles %}      {% endif %}*</span>
+            {{ role }}{% endfor %}</p>
 
             {% if 'patient' in pu.roles and pu.interestedIn is not empty %}
-                <p><span class='text-green-700 text-sm'>His domains of interests :<br>
+                <p><span class='text-green-700 text-sm'>His domains of interests:<br>
                     {% for interest in pu.interestedIn %}
-                        <span class='text-green-700 text-sm'>                         *</span></span> {{ interest }}<br>
+                        <span class='text-green-700 text-sm'>                          *</span></span> {{ interest }}<br>
                     {% endfor %}
                 </p>
             {% endif %}
 
             {% if 'professional' in pu.roles %}
-                <p>Is specialized in :{% for spe in pu.specialization %}<br>        * {{ spe }}{% endfor %}</p>
-                {% if pu.onlineAvailability %}<p>Can be reach online for your session!</p>{% endif %}
+                <p><span class='text-green-700 text-sm'>And specialized in:</span>{% for spe in pu.specialization %}<span class='text-green-700 text-sm'>
+                <br>                                * </span>{{ spe }}{% endfor %}</p>
+                {% if pu.onlineAvailability %}<p class='text-green-700 text-sm'>Can be reached <span class='text-green-500 font-bold underline'>online</span> for your session!</p>{% endif %}
                 {% if pu.location %}
+                    <p><span class='text-green-700 text-sm'>Is located at:</span></p>
                     <p>{{ address }}</p>
-                    <p>{{ latitude }}</p>
-                    <p>{{ longitude }}</p>
+                    {# <p>{{ latitude }}</p>
+                    <p>{{ longitude }}</p> #}
                 {% endif %}
                 {% if pu.video %}
-                    {% set videoId = pu.video|split('/')|last %}
-
+                    {% set videoId = pu.video|split('v=')|last %}
+                    
                     {% set embedUrl = 'https://www.youtube.com/embed/' ~ videoId %}
-
-                    <iframe width="560" height="315" src="{{ embedUrl }}" frameborder="0" allowfullscreen></iframe>
+                    <div class="relative overflow-hidden rounded-md" style="padding-top: calc(9 / 16 * 100%);">
+                        <iframe src="{{ embedUrl }}" frameborder="0" allowfullscreen class="absolute top-0 left-0 w-full h-full"></iframe>
+                    </div>
                 {% endif %}
             {% endif %}
+            <p><span class='text-green-700 text-sm'>Member of <span class='text-green-500 font-bold'>Well-Being</span> since: </span>{{ pu.registrationDate|date('F Y') }}</p>
         </div>
     </div>
+</div>
 {% endblock %}

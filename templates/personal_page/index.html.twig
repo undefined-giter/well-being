@@ -46,7 +46,14 @@ p{margin-bottom:8px;}
                         {{ role }} 
                     {% endfor %}
                 </p>
-                
+                {% if pu.video %}
+                    {% set videoId = pu.video|split('v=')|last %}
+                    
+                    {% set embedUrl = 'https://www.youtube.com/embed/' ~ videoId %}
+                    <div class="relative overflow-hidden rounded-md" style="padding-top: calc(9 / 16 * 100%);">
+                        <iframe src="{{ embedUrl }}" frameborder="0" allowfullscreen class="absolute top-0 left-0 w-full h-full"></iframe>
+                    </div>
+                {% endif %}
                 <p><span class='text-green-700 text-sm'>Member since:     </span>{{ pu.registrationDate|date('F Y') }}</p>
             </div>
             <div class="text-right">

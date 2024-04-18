@@ -10,17 +10,17 @@ li{color:red;}
     <div class="text-center">
         <h1 class="h3 mb-3 font-weight-normal text-center">Update Your Password</h1>
 
-        <div class="col-md-6 offset-md-3 relative mx-auto sm:w-[400px] w-full">
+        <div class="col-md-6 offset-md-3 relative mx-auto sm:w-[500px] w-full">
             {{ form_start(form) }}
 
             {{ form_row(form.password.first, {
                 'label': 'Enter your new password',
-                'attr': { 'class': 'block w-full sm:w-2/5 md:w-[300px] text-center mx-auto mt-2 mb-3 p-2' }
+                'attr': { 'class': 'block w-full sm:w-2/5 text-center mx-auto mt-2 mb-3 p-2' }
             }) }}
 
             {{ form_row(form.password.second, {
                 'label': 'Confirm your new password',
-                'attr': { 'class': 'block w-full sm:w-2/5 md:w-[300px] text-center mx-auto mt-2 mb-4 p-2' }
+                'attr': { 'class': 'block w-full sm:w-2/5 text-center mx-auto mt-2 mb-4 p-2' }
             }) }}
 
             <div class="flex justify-end">

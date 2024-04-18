@@ -106,10 +106,13 @@ class UpdateProfessionalController extends AbstractController
             $session->getFlashBag()->add('danger', 'Please, check your form.');
         }
 
+        $googleMapsApiKey = $params->get('GOOGLE_MAPS_API_KEY');
+
         return $this->render('update_professional/index.html.twig', [
             'form' => $form->createView(),
             'profilePicture' => $original_professional->getPicture(),
             'originalSpecialization' => json_encode($original_professional->getSpecialization()),
+            'googleMapsApiKey' => $googleMapsApiKey,
         ]);
     }
 }

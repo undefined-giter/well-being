@@ -2,6 +2,7 @@
 
 {% block title %}Professional Registration{% endblock %}
 
+
 {% block map_head %}
 {# block map #}
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
@@ -149,7 +150,7 @@ window.initMap = initMap;
         <div class='absolute right-[10px]'>
             {{ form_row(form.irl_availability) }}
         </div>
-        <div class='mb-6'></div>
+        <br>
         {{ form_row(form.video, {'attr': {'class': 'w-full border rounded mb-2 p-2 usual text-black', 'placeholder': 'Your Presentation - Full-Link'}})  }}
         {{ form_row(form._token) }}
         {{ form_row(form.password, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Password'}}) }}

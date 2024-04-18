@@ -6,6 +6,7 @@ use App\Entity\Professional;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -30,6 +31,20 @@ class UpdateProfessionalType extends UpdateBaseUserType
             ->add('delete_specialization', CheckboxType::class, [
                 'label' => 'Delete current profile picture',
                 'mapped' => false,
+            ])
+            ->add('other_specialization', TextType::class, [
+                'label' => false,
+                'required' => false,
+                'mapped' => false,
+                'attr' => [
+                    'class' => 'other-specialization-field w-full border rounded mb-2 p-2',
+                    'style' => 'display: none;',
+                    'placeholder' => 'Add your specialization',
+                ],
+            ])
+            ->add('location', TextType::class, [
+                'label' => false,
+                'required' => false,
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Modify Profile',

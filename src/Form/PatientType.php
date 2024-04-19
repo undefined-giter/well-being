@@ -65,7 +65,7 @@ class PatientType extends BaseUserType
             ],
             'label' => "Yours interests <small>-> <span style='color:orange'>Maintain 
                         <b style='color:lightgreen'>Ctrl</b> to select multiple</span></small>",
-            'required' => true,
+            'required' => false,
             'multiple' => true,
             'label_html' => true,
             'mapped' => false,

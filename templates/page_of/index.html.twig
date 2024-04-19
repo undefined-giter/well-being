@@ -12,24 +12,29 @@ p{margin-bottom:8px;}
         {% if pu.picture %}
             <img src="{{ asset('profilesPictures/' ~ pu.picture) }}" alt="                    Your Profile Picture" style="height: 150px; border-radius: 50%;" class='mx-auto'>
         {% endif %}
-        <h1 class='h3 mb-3 font-weight-normal text-center'>{{ pu.firstName }} {{ pu.lastName }}'s page</h1>
+        <h1 class='h3 mb-3 font-weight-normal text-center'>{{ pu.firstName|title }} {{ pu.lastName|title }}'s page</h1>
         <div class='personal_bg'>
-            <p><span class='text-green-700 text-sm'>Description:</span><br>      {{ pu.description }}</p>
-            <p><span class='text-green-700 text-sm'>He is a:             </span>{% for role in pu.roles|slice(1) %}
+            {% if pu.description|trim != '' %}
+                <p><span class='text-green-700 text-sm'>Description:               </span>{{ pu.description }}</p>
+            {% endif %}
+            <p><span class='text-green-700 text-sm'>Is a:                   </span>{% for role in pu.roles|slice(1) %}
             <span class='text-green-700 text-sm'>{% if 'professional' in pu.roles %}      {% endif %}*</span>
-            {{ role }}{% endfor %}</p>
+            {{ role|title }}{% endfor %}</p>
 
             {% if 'patient' in pu.roles and pu.interestedIn is not empty %}
-                <p><span class='text-green-700 text-sm'>His domains of interests:<br>
+                <p><span class='text-green-700 text-sm'>Domains of interests:<br>
                     {% for interest in pu.interestedIn %}
-                        <span class='text-green-700 text-sm'>                          *</span></span> {{ interest }}<br>
+                        <span class='text-green-700 text-sm'>                          *</span></span> {{ interest|title }}<br>
                     {% endfor %}
                 </p>
             {% endif %}
 
             {% if 'professional' in pu.roles %}
-                <p><span class='text-green-700 text-sm'>And specialized in:</span>{% for spe in pu.specialization %}<span class='text-green-700 text-sm'>
-                <br>                                * </span>{{ spe }}{% endfor %}</p>
+                <p><span class='text-green-700 text-sm'>Specialization{% if pu.specialization|length > 1 %}s:</span>
+                    {% for spe in pu.specialization %}<br>                          * {{ spe|title }}{% endfor %}
+                {% elseif pu.specialization|length == 1 %}:         </span> {{ pu.specialization[0]|title }}
+                {% else %}:<span class='text-red-700 text-sm'>     You need to enter your specialization.</span></span>
+                {% endif %}</p>
                 {% if pu.onlineAvailability %}<p class='text-green-700 text-sm'>Can be reached <span class='text-green-500 font-bold underline'>online</span> for your session!</p>{% endif %}
                 {% if pu.location %}
                     <p><span class='text-green-700 text-sm'>Is located at:</span></p>
@@ -46,7 +51,7 @@ p{margin-bottom:8px;}
                     </div>
                 {% endif %}
             {% endif %}
-            <p><span class='text-green-700 text-sm'>Member of <span class='text-green-500 font-bold'>Well-Being</span> since: </span>{{ pu.registrationDate|date('F Y') }}</p>
+            <p class='mt-2'><span class='text-green-700 text-sm'>Member of <span class='text-green-500 font-bold'>Well-Being</span> since: </span>{{ pu.registrationDate|date('F Y') }}</p>
         </div>
     </div>
 </div>

@@ -119,10 +119,12 @@ window.initMap = initMap;
 {% endblock %}
 {% block body %}
     <div class="container mb-4">
-        {% for flash_message in app.session.flashbag.get('danger') %}
-            <div class="alert alert-danger mx-6">
-                {{ flash_message }}
-            </div>
+        {% for flashType, flashMessages in app.session.flashbag.all() %}
+            {% for flashMessage in flashMessages %}
+                <div class="alert alert-{{ flashType }} w-[400px] mx-auto" role="alert">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
         {% endfor %}
 
         <h1 class='h3 mb-3 font-weight-normal text-center'>Update Your Professional Profile</h1>
@@ -130,9 +132,9 @@ window.initMap = initMap;
         <div class="relative mx-auto sm:w-[400px] w-full">
             {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
 
-            {{ form_row(form.first_name, {'attr': {'class': 'form-control mb-3 usual', 'placeholder': 'First Name'}}) }}
-            {{ form_row(form.last_name, {'attr': {'class': 'form-control mb-3 usual', 'placeholder': 'Last Name'}}) }}
-            {{ form_row(form.email, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Email'}}) }}
+            {{ form_row(form.first_name, {'attr': {'class': 'form-control mb-3 usual watch', 'placeholder': 'First Name'}}) }}
+            {{ form_row(form.last_name, {'attr': {'class': 'form-control mb-3 usual watch', 'placeholder': 'Last Name'}}) }}
+            {{ form_row(form.email, {'attr': {'class': 'form-control mb-3 watch email', 'placeholder': 'Email'}}) }}
             {% if profilePicture %}
                 <div class='flex'>
                     Your current profile picture: <img src="{{ asset('profilesPictures/' ~ profilePicture) }}" alt="Current Profile Picture" style="height: 50px; border-radius: 50%; margin: 0 0 -26px 48px;">
@@ -143,6 +145,8 @@ window.initMap = initMap;
                     'widget_type': 'inline',
                     'attr': {'class': 'custom-checkbox'}
                 }) }}
+            {% else %}
+                {{ form_row(form.delete_picture, {'attr': {'class': 'hidden'}, 'label_attr': {'class': 'hidden'}}) }}
             {% endif %}
             {{ form_row(form.picture, {'attr': {'class': 'form-control mb-3'}}) }}
             {{ form_row(form.description, {'attr': {'class': 'form-control mb-3', 'rows': '4', 'placeholder': 'Description'}}) }}
@@ -160,16 +164,16 @@ window.initMap = initMap;
                 {{ form_row(form.other_specialization) }}
             </div>
             {{ form_row(form.online_availability, {'attr': {'class': '-mt-1'}}) }}
-            {{ form_row(form.location, {'id': 'location_input', 'attr': {'style': 'width: 400px;'}}) }}
+            {{ form_row(form.location, {'id': 'location_input', 'attr': {'style': 'display: none;'}}) }}
             <p id='address'>Enter or pick your location</p>
             <div id="map" style='height:350px; border-radius:0.5em'></div>
             <div class='absolute right-[10px]'>
-                {{ form_row(form.irl_availability, {'attr': {'class': '-mt-1'}}) }}
+                {{ form_row(form.irl_availability) }}
             </div>
             <br>
             {{ form_row(form.video, {'attr': {'class': 'w-full border rounded mb-4 p-2 usual text-black', 'placeholder': 'Your Presentation - Full-Link'}})  }}
             {{ form_row(form.hidden_original_picture, {'attr': {'style': 'display:none;', 'value': profilePicture } }) }}
-            {{ form_row(form.hidden_original_specialization, {'attr': {'style': 'display:none;', 'value': originalSpecialization } }) }}
+            {{ form_row(form.hidden_original_specialization, {'attr': {'style': 'display:none;', 'value': hidden_original_specialization } }) }}
             {# {{ form_row(form.password, {'attr': {'class': 'form-control mb-3', 'placeholder': 'Password'}}) }} #}
             
             <div class="flex justify-between mb-4 mx-6">
@@ -182,7 +186,8 @@ window.initMap = initMap;
                     'label': 'Modify Profile',
                     'attr': {
                         'class': 'btn bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100'
-                    }
+                    },
+                    'id': 'submit_button'
                 }) }}
             </div>
             {{ form_row(form._token) }}
@@ -208,6 +213,46 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+</script>
+
+{# disable btn submit if first_name last_name or email input are empty #}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var watchInputs = document.querySelectorAll('.watch');
+    var email = document.querySelector('.email');
+    var submitButton = document.querySelector('#submit_button');
+
+    function validateForm() {
+        var allFilled = true;
+        var validEmailFormat = true;
+
+        watchInputs.forEach(function(input) {
+            if (input.value.trim() === '') {
+                allFilled = false;
+            }
+        });
+
+        if (email.value.trim() !== '') {
+            var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            validEmailFormat = emailPattern.test(email.value.trim());
+        }
+
+        submitButton.disabled = !allFilled || !validEmailFormat;
+
+        if (allFilled && validEmailFormat) {
+            submitButton.classList.remove('disabled');
+        } else {
+            submitButton.classList.add('disabled');
+        }
+    }
+
+    watchInputs.forEach(function(input) {
+        input.addEventListener('input', validateForm);
+    });
+
+    validateForm();
+});
+
 </script>
 
 {# Gives the array (latitude, longitude,address) of the location #}

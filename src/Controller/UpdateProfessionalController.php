@@ -34,9 +34,9 @@ class UpdateProfessionalController extends AbstractController
     #[Route('/professional-update', name: 'professional_update')]
     public function index(SessionInterface $session, Request $request, ParameterBagInterface $params): Response
     {
-        if(!$this->getUser()){$this->redirectToRoute('login');}
-
         $user = $this->getUser();
+
+        if(!$user){return $this->redirectToRoute('login');}
 
         if(!in_array('professional', $user->getRoles())){
             $session->getFlashBag()->add('info', 'You are not registered as a professional.');
@@ -45,11 +45,13 @@ class UpdateProfessionalController extends AbstractController
 
         $original_professional = $user;
         
+        $original_professional_spe = json_encode($original_professional->getSpecialization());
+        $original_professional_pic = $original_professional->getSpecialization();
+
         $form = $this->createForm(UpdateProfessionalType::class, $original_professional);
 
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-
+        if ($form->isSubmitted()) {
             $professional = $form->getData();
 
             $professional->setFirstName($professional->getFirstName());
@@ -86,14 +88,17 @@ class UpdateProfessionalController extends AbstractController
                 }
             }
 
-            if ($form->get('delete_interestedIn')->getData()) {
-                $professional->setInterestedIn([]);
-            }elseif (!$form->get('interestedIn')->getData()) {
-                $originalInterests = json_decode($form->get('hidden_original_interests')->getData(), true);
-                $professional->setInterestedIn($originalInterests);
+
+            if ($form->get('delete_specialization')->getData()) {
+                $professional->setSpecialization([]);
+            }elseif (!$form->get('specialization')->getData() && !$form->get('other_specialization')->getData()) {
+                $originalSpecialization = json_decode($form->get('hidden_original_specialization')->getData(), true);
+                $professional->setSpecialization($originalSpecialization);
             }else{
-                $interestedIn = $form->get('interestedIn')->getData();
-                $professional->setInterestedIn($interestedIn);
+                $specialization = $form->get('specialization')->getData();
+                $personal_specialization = $form->get('other_specialization')->getData();
+                if (!empty($personal_specialization)){$specialization[] = $personal_specialization;}
+                $professional->setSpecialization($specialization);
             }
 
             $this->entityManager->persist($professional);
@@ -111,7 +116,7 @@ class UpdateProfessionalController extends AbstractController
         return $this->render('update_professional/index.html.twig', [
             'form' => $form->createView(),
             'profilePicture' => $original_professional->getPicture(),
-            'originalSpecialization' => json_encode($original_professional->getSpecialization()),
+            'hidden_original_specialization' => $original_professional_spe,
             'googleMapsApiKey' => $googleMapsApiKey,
         ]);
     }

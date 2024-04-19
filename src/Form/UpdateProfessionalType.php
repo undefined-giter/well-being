@@ -9,7 +9,10 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 class UpdateProfessionalType extends UpdateBaseUserType
 {
@@ -46,10 +49,10 @@ class UpdateProfessionalType extends UpdateBaseUserType
                 'label' => false,
                 'required' => false,
             ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Modify Profile',
-                'attr' => ['class' => 'align-right btn bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100'],
-            ])
+            // ->add('save', SubmitType::class, [
+            //     'label' => 'Modify Profile',
+            //     'attr' => ['class' => 'align-right btn bg-blue-700 hover:bg-blue-800 text-slate-200 hover:text-slate-100'],
+            // ])
             ->add('hidden_original_picture', HiddenType::class, [
                 'mapped' => false,
             ])->add('hidden_original_specialization', HiddenType::class, [

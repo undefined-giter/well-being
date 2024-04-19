@@ -25,7 +25,6 @@ class ListProfessionalController extends AbstractController
         else{$isRegistered = false;}
 
         $specialization = $request->query->get('specializationFilter');
-        // var_dump($specialization);die;
         $professionalSummary = $this->ProfessionalRepository->findProfessionalSummary($specialization);
 
         return $this->render('list_professional/index.html.twig', [

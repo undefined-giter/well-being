@@ -4,6 +4,8 @@
 
 
 {% block body %}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ googleMapsApiKey }}&callback=initMap" defer></script>
+
 <style>
 p{margin-bottom:8px;}
 </style>
@@ -15,7 +17,7 @@ p{margin-bottom:8px;}
         <h1 class='h3 mb-3 font-weight-normal text-center'>{{ pu.firstName|title }} {{ pu.lastName|title }}'s page</h1>
         <div class='personal_bg'>
             {% if pu.description|trim != '' %}
-                <p><span class='text-green-700 text-sm'>Description:               </span>{{ pu.description }}</p>
+                <p><span class='text-green-700 text-sm'>Description:               </span>{{ pu.description|nl2br }}</p>
             {% endif %}
             <p><span class='text-green-700 text-sm'>Is a:                   </span>{% for role in pu.roles|slice(1) %}
             <span class='text-green-700 text-sm'>{% if 'professional' in pu.roles %}      {% endif %}*</span>
@@ -41,11 +43,22 @@ p{margin-bottom:8px;}
                     <p>{{ address }}</p>
                     {# <p>{{ latitude }}</p>
                     <p>{{ longitude }}</p> #}
+                    <div id="map" style='height:210px; border-radius:0.5em;margin-left:1px;margin-right:1px;'></div>
+                    <br>
                 {% endif %}
                 {% if pu.video %}
                     {% set videoId = pu.video|split('v=')|last %}
-                    
-                    {% set embedUrl = 'https://www.youtube.com/embed/' ~ videoId %}
+                    {% set delimiters = ['=', '&'] %}
+                    {% set extractedVideoId = videoId %}
+                    {% for delimiter in delimiters %}
+                        {% if delimiter in videoId %}
+                            {% set parts = videoId|split(delimiter) %}
+                            {% set extractedVideoId = parts[0] %}
+                            {% set videoId = extractedVideoId %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% set embedUrl = 'https://www.youtube.com/embed/' ~ extractedVideoId %}
                     <div class="relative overflow-hidden rounded-md" style="padding-top: calc(9 / 16 * 100%);">
                         <iframe src="{{ embedUrl }}" frameborder="0" allowfullscreen class="absolute top-0 left-0 w-full h-full"></iframe>
                     </div>
@@ -55,4 +68,29 @@ p{margin-bottom:8px;}
         </div>
     </div>
 </div>
+{% endblock %}
+
+
+{% block js %}
+<script>
+    function initMap() {
+        const latitude = {{ latitude|default(0) }};
+        const longitude = {{ longitude|default(0) }};
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: latitude, lng: longitude },
+            zoom: 14,
+        });
+
+        new google.maps.Marker({
+            position: { lat: latitude, lng: longitude },
+            map: map,
+            title: "Your Place",
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        initMap();
+    });
+</script>
 {% endblock %}

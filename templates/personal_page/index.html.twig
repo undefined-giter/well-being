@@ -3,9 +3,12 @@
 {% block title %}Hey {{ pu.firstName }} {{ pu.lastName }} !{% endblock %}
 
 {% block body %}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ googleMapsApiKey }}&callback=initMap" defer></script>
+
 <style>
 p{margin-bottom:8px;}
 </style>
+
     <div class="flex justify-center mb-4 mx-auto">
         <div class="sm:w-1/2 md:w-[420px] text-orange-700">
             <h1 class="h3 mb-3 font-weight-normal text-center text-orange-400">🌳Your infos {{ pu.firstName }}🌳</h1>
@@ -21,7 +24,7 @@ p{margin-bottom:8px;}
                 <p><span class='text-green-700 text-sm'>Your last name:   </span>{{ pu.lastName|title }}</p>
                 <p><span class='text-green-700 text-sm'>Your email:          </span>{{ pu.email }}</p>
                 {% if pu.description|trim() != '' %}
-                    <p><span class='text-green-700 text-sm'>Your description: </span>{{ pu.description }}</p>
+                    <p><span class='text-green-700 text-sm'>Your description: </span>{{ pu.description|nl2br }}</p>
                 {% else %}
                     <p><span class='text-green-700 text-sm'>Please, describe your activity.</span></p>
                 {% endif %}
@@ -32,8 +35,14 @@ p{margin-bottom:8px;}
                             <span class='text-green-700 text-sm'>                          *</span></span> {{ interest|title }}<br>
                         {% endfor %}
                     </p>
+                    {% if pu.isFollowed %}
+                        <p class='text-red-700 text-sm'>You no longer appear in available list for professionals</p>
+                    {% endif %}
                 {% elseif 'patient' in pu.roles %}
                     <p><span class='text-green-700 text-sm'>No domain of interest registered yet.</p>
+                    {% if pu.isFollowed %}
+                        <p class='text-red-700 text-sm'>You no longer appear in available list for professionals</p>
+                    {% endif %}
                 {% endif %}
 
                 {% if 'professional' in pu.roles %}
@@ -42,28 +51,37 @@ p{margin-bottom:8px;}
                     {% elseif pu.specialization|length == 1 %}:    </span> {{ pu.specialization[0]|title }}
                     {% else %}:<span class='text-red-700 text-sm'>     You need to enter your specialization.</span></span>
                     {% endif %}</p>
-                {% endif %}
-                
-                <p>
-                    <span class='text-green-700 text-sm'>Registered as a:</span>
-                     
-                    {% for role in pu.roles|slice(1) %}
-                        {{ role|title }} 
-                    {% endfor %}
-                </p>
-                {% if pu.location %}
-                    <p><span class='text-green-700 text-sm'>Is located at:</span></p>
-                    <p>{{ address }}</p>
-                    {# <p>{{ latitude }}</p>
-                    <p>{{ longitude }}</p> #}
-                {% endif %}
-                {% if pu.video %}
-                    {% set videoId = pu.video|split('v=')|last %}
-                    
-                    {% set embedUrl = 'https://www.youtube.com/embed/' ~ videoId %}
-                    <div class="relative overflow-hidden rounded-md" style="padding-top: calc(9 / 16 * 100%);">
-                        <iframe src="{{ embedUrl }}" frameborder="0" allowfullscreen class="absolute top-0 left-0 w-full h-full"></iframe>
-                    </div>
+               
+                    <p><span class='text-green-700 text-sm'>Registered as a:</span> 
+                        {% for role in pu.roles|slice(1) %}
+                            {{ role|title }} 
+                        {% endfor %}
+                    </p>
+                    {% if pu.location %}
+                        <p><span class='text-green-700 text-sm'>Your location:</span></p>
+                        <p>{{ address }}</p>
+                        {# <p>{{ latitude }}</p>
+                        <p>{{ longitude }}</p> #}
+                        <div id="map" style='height:210px; border-radius:0.5em;margin-left:1px;margin-right:1px;'></div>
+                        <br>
+                    {% endif %}
+                    {% if pu.video %}
+                        {% set videoId = pu.video|split('v=')|last %}
+                        {% set delimiters = ['=', '&'] %}
+                        {% set extractedVideoId = videoId %}
+                        {% for delimiter in delimiters %}
+                            {% if delimiter in videoId %}
+                                {% set parts = videoId|split(delimiter) %}
+                                {% set extractedVideoId = parts[0] %}
+                                {% set videoId = extractedVideoId %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% set embedUrl = 'https://www.youtube.com/embed/' ~ extractedVideoId %}
+                        <div class="relative overflow-hidden rounded-lg" style="padding-top: calc(9 / 16 * 100%);">
+                            <iframe src="{{ embedUrl }}" frameborder="0" allowfullscreen class="absolute top-0 left-0 w-full h-full"></iframe>
+                        </div>
+                    {% endif %}
                 {% endif %}
                 <p><span class='text-green-700 text-sm'>Member since:     </span>{{ pu.registrationDate|date('F Y') }}</p>
             </div>
@@ -80,4 +98,28 @@ p{margin-bottom:8px;}
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block js %}
+<script>
+    function initMap() {
+        const latitude = {{ latitude|default(0) }};
+        const longitude = {{ longitude|default(0) }};
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: latitude, lng: longitude },
+            zoom: 14,
+        });
+
+        new google.maps.Marker({
+            position: { lat: latitude, lng: longitude },
+            map: map,
+            title: "Your Place",
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        initMap();
+    });
+</script>
 {% endblock %}

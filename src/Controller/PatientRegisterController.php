@@ -95,7 +95,7 @@ class PatientRegisterController extends AbstractController
                 'message' => 'You have been recorded, please login🌳',
                 'duration' => 5000
             ]);
-            
+            $description = $form['description']->getData();
             $entityManager->persist($patient);
             $entityManager->flush();
 
